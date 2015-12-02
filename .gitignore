@@ -1,0 +1,10 @@
+CakePHP 2
+
+/tmp/*
+/Config/database.php
+/Vendor/*
+/Console
+
+!.htaccess
+!app/.htaccess
+!app/webroot/.htaccess
