@@ -15,6 +15,6 @@
     },
     "scripts": {
       "fixcs": "Vendor/bin/phpcbf --standard=CakePHP ./*/*.php",
-      "hola": "sh ./hola.sh" 
+      "pull": "git pull origin master" 
     }
 }
