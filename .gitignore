@@ -1,7 +1,6 @@
 CakePHP 2
 
 /tmp/*
-/Config/database.php
 /Vendor/*
 /Console
 
