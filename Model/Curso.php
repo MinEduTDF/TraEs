@@ -36,7 +36,7 @@ class Curso extends AppModel {
 			'exclusive' => '',
 			'finderQuery' => '',
 			'counterQuery' => ''
-		),
+		)
 	);
 
     var $hasAndBelongsToMany = array(
@@ -90,50 +90,94 @@ class Curso extends AppModel {
     //Validaciones
 
         var $validate = array(
-                   'tipo' => array(
-                           'allowedChoice' => array(
-                           'rule' => array('minLength',3),
-                           'allowEmpty' => false,
-                           'message' => 'Indicar una opcion.'
+                   'created' => array(
+						   'required' => array(
+						   'rule' => 'notBlank',
+						   'required' => 'create',
+						   'message' => 'Indicar una fecha y hora.'
+						   )
+                   ),
+                   /*
+				   'tipo' => array(
+                           'required' => array(
+						   'rule' => 'notBlank',
+						   'required' => 'create',
+                           'message' => 'Indicar un tipo.'
                            )
                    ),
+                   */
 				   'anio' => array(
-                           'allowedChoice' => array(
-                           'rule' => array('maxLength',11),
-                           'allowEmpty' => false,
-                           'message' => 'Indicar una opcion.'
+                           'required' => array(
+						   'rule' => 'notBlank',
+						   'required' => 'create',
+                           'message' => 'Indicar un año.'
                            )
                    ),
                    'division' => array(
-                           'allowedChoice' => array(
-                           'rule' => array('maxLength',11),
-                           'allowEmpty' => false,
-                           'message' => 'Indicar una opcion.'
+                           'required' => array(
+						   'rule' => 'notBlank',
+						   'required' => 'create',
+                           'message' => 'Indicar una división.'
                            )
                    ),
                    'turno' => array(
-                           'allowedChoice' => array(
-                           'rule' => array('maxLength',10),
-                           'allowEmpty' => false,
-                           'message' => 'Indicar una opcion.'
+                           'required' => array(
+						   'rule' => 'notBlank',
+						   'required' => 'create',
+                           'message' => 'Indicar un turno.'
                            )
                    ),
-                   'aula_nro' => array(
-                           'allowedChoice' => array(
+                   /*
+                   'matricula' => array(
+                           'required' => array(
+						   'rule' => 'notBlank',
+						   'required' => 'create',
+                           'message' => 'Indicar un número.'
+                           ),
+						   'numeric' => array(
                            'rule' => 'numeric',
                            'allowEmpty' => false,
-                           'message' => 'Indicar una opcion.'
+                           'message' => 'Indicar un número.'
                            )
                    ),
-                   'observacion' => array(
-                           'allowedChoice' => array(
-                           'rule' => array('minLength',5),
-                           'allowEmpty' => true,
-                           'message' => 'Indicar una breve observacion.'
+                   */
+				   'aula_nro' => array(
+                           'required' => array(
+						   'rule' => 'notBlank',
+						   'required' => 'create',
+                           'message' => 'Indicar un aula.'
+                           ),
+						   'numeric' => array(
+                           'rule' => 'numeric',
+                           'allowEmpty' => false,
+                           'message' => 'Indicar un nº.'
+                           )
+                   ),
+                   /*
+                   'centro_id' => array(
+                           'required' => array(
+						   'rule' => 'notBlank',
+						   'required' => 'create',
+                           'message' => 'Indicar un centro.'
                             )
                    ),
-              
+                   */
+                   'ciclo_id' => array(
+                           'required' => array(
+						   'rule' => 'notBlank',
+						   'required' => 'create',
+                           'message' => 'Indicar un ciclo.'
+                            )
+                   )
+				   /*
+				   'titulacion_id' => array(
+                           'required' => array(
+						   'rule' => 'notBlank',
+						   'required' => 'create',
+                           'message' => 'Indicar una titulación.'
+                            )
+                   )
+                   */
      );
-
 }
 ?>

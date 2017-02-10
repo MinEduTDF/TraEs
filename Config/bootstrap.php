@@ -64,18 +64,20 @@ Configure::write('Dispatcher.filters', array(
     'AssetDispatcher',
     'CacheDispatcher'
 ));
-CakePlugin::loadAll();
-//CakePlugin::load('Upload');
 
+CakePlugin::load('Upload');
+CakePlugin::load('DebugKit');
+CakePlugin::load('ReportManager',array('bootstrap' => true));
+CakePlugin::load('CakePdf', array('bootstrap' => true, 'routes' => true));
+CakePlugin::load('TinyMCE');
 /**
  * Configuration CakePdf
  */
-/*define('DOMPDF_ENABLE_REMOTE', true);
+define('DOMPDF_ENABLE_REMOTE', true);
 CakePlugin::load('CakePdf', array('bootstrap' => true, 'routes' => true));
 Configure::write('CakePdf', array(
     'engine' => 'CakePdf.DomPdf',
     'pageSize' => 'A4',
     'orientation' => 'portrait'
 ));
-*/
-
+//CakePlugin::load('FullCalendar');

@@ -1,10 +1,24 @@
 <?php
+
+App::uses('AppController', 'Controller');
+
 class CentrosController extends AppController {
 
 	var $name = 'Centros';
-    var $helpers = array('Session');
-	var $components = array('Auth','Session');
+    public $helpers = array('Form', 'Time', 'Js', 'TinyMCE.TinyMCE');
+	public $components = array('Session', 'Paginator', 'RequestHandler');
 	var $paginate = array('Centro' => array('limit' => 4, 'order' => 'Centro.cue ASC'));
+
+ 	public function beforeFilter() {
+        parent::beforeFilter();
+        //Si el usuario tiene un rol de superadmin le damos acceso a todo.
+        //Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
+        if($this->Auth->user('role') === 'superadmin') {
+	        $this->Auth->allow();
+	    } elseif ($this->Auth->user('role') === 'usuario') { 
+	        $this->Auth->allow('index', 'view');
+	    } 
+    }
 
  	function index() {
 		$this->Centro->recursive = 0;
@@ -12,21 +26,13 @@ class CentrosController extends AppController {
 		$this->redirectToNamed();
 		$conditions = array();
 		
-		$activeLetter = isset($this->params['named']['letter']) ? $this->params['named']['letter']: '';
-		$letters = array('A','B','C','D','E','F','G','H',
-						 'I','J','K','L','M','N','O','P',
-						 'Q','R','S','T','U','V','W','X','Y','Z');
-		
-		$centros = isset($activeLetter)? $this->paginate('Centro', array('Centro.ciudad LIKE ' => $activeLetter.'%')) : $this->paginate();
-		$urlArgs = array('url' => $this->params['named']);
-		
 		if(!empty($this->params['named']['cue']))
 		{
 			$conditions['Centro.cue ='] = $this->params['named']['cue'];
 		}
 		
 		$centros = $this->paginate('Centro', $conditions);
-		$this->set(compact('centros','letters','activeLetter','urlArgs'));
+		$this->set(compact('centros'));
 	}
 	
 	function view($id = null) {
@@ -38,6 +44,11 @@ class CentrosController extends AppController {
 	}
 
 	function add() {
+		//abort if cancel button was pressed  
+        if(isset($this->params['data']['cancel'])){
+                $this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
+                $this->redirect( array( 'action' => 'index' ));
+		}
 		if (!empty($this->data)) {
 			$this->Centro->create();
 			if ($this->Centro->save($this->data)) {
@@ -60,6 +71,11 @@ class CentrosController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}
 		if (!empty($this->data)) {
+			//abort if cancel button was pressed  
+	        if(isset($this->params['data']['cancel'])){
+	                $this->Session->setFlash('Los cambios no fueron guardados. Edición cancelada.', 'default', array('class' => 'alert alert-warning'));
+	                $this->redirect( array( 'action' => 'index' ));
+			}
 			if ($this->Centro->save($this->data)) {
 				$this->Session->setFlash('El centro ha sido grabado', 'default', array('class' => 'alert alert-success'));
 				//$this->redirect(array('action' => 'index'));

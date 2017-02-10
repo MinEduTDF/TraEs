@@ -40,12 +40,12 @@ class TitulacionsController extends AppController {
 		  if (!empty($this->data)) {
 		    $this->Titulacion->create();
 			if ($this->Titulacion->save($this->data)) {
-				$this->Session->setFlash(__('La titulacion ha sido grabada.'));
+				$this->Session->setFlash('La titulacion ha sido grabada.', 'default', array('class' => 'alert alert-success'));
 				//$this->redirect(array('action' => 'index'));
 				$inserted_id = $this->Titulacion->id;
 				$this->redirect(array('action' => 'view', $inserted_id));
 			} else {
-				$this->Session->setFlash(__('La titulacion no ha sido grabada. Favor, intente nuevamente.'));
+				$this->Session->setFlash('La titulacion no ha sido grabada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
 		$centros = $this->Titulacion->Centro->find('list');
@@ -54,7 +54,7 @@ class TitulacionsController extends AppController {
 
 	function edit($id = null) {
 		if (!$id && empty($this->data)) {
-			$this->Session->setFlash(__('Titulacion no valida.'));
+			$this->Session->setFlash('Titulacion no valida.', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action' => 'index'));
 		}
 		if (!empty($this->data)) {
@@ -64,12 +64,12 @@ class TitulacionsController extends AppController {
                 $this->redirect( array( 'action' => 'index' ));
 		  }
 			if ($this->Titulacion->save($this->data)) {
-				$this->Session->setFlash(__('La titulación ha sido grabada.'));
+				$this->Session->setFlash('La titulación ha sido grabada.', 'default', array('class' => 'alert alert-success'));
 				//$this->redirect(array('action' => 'index'));
 				$inserted_id = $this->Titulacion->id;
 				$this->redirect(array('action' => 'view', $inserted_id));
 			} else {
-				$this->Session->setFlash(__('La titulación no ha sido grabada. Favor, intente nuevamente.'));
+				$this->Session->setFlash('La titulación no ha sido grabada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
 		if (empty($this->data)) {
@@ -81,14 +81,14 @@ class TitulacionsController extends AppController {
 
 	function delete($id = null) {
 		if (!$id) {
-			$this->Session->setFlash(__('Id no valido para titulación.'));
+			$this->Session->setFlash('Id no valido para titulación.', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action'=>'index'));
 		}
 		if ($this->Titulacion->delete($id)) {
-			$this->Session->setFlash(__('Titulación borrada.'));
+			$this->Session->setFlash('La Titulación ha sido borrado', 'default', array('class' => 'alert alert-success'));
 			$this->redirect(array('action'=>'index'));
 		}
-		$this->Session->setFlash(__('Titulación no fue borrada.'));
+		$this->Session->setFlash('La Titulación no fue borrado', 'default', array('class' => 'alert alert-danger'));
 		$this->redirect(array('action' => 'index'));
 	}
 }

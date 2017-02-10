@@ -4,52 +4,75 @@ App::uses('AppController', 'Controller');
 class AlumnosController extends AppController {
 
 	var $name = 'Alumnos';
-    var $helpers = array('Session', 'Form', 'Time', 'Js');
-	public $components = array('Auth','Session', 'RequestHandler');
-	var $paginate = array('Alumno' => array('limit' => 4, 'order' => 'Alumno.creado DESC'));
+    public $helpers = array('Form', 'Time', 'Js', 'TinyMCE.TinyMCE');
+	public $components = array('Session', 'RequestHandler');
+	public $paginate = array('Alumno' => array('limit' => 4, 'order' => 'Alumno.created DESC'));
 
-	function index() {
+    public function beforeFilter() {
+        parent::beforeFilter();
+        //Si el usuario tiene un rol de superadmin le damos acceso a todo.
+        //Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
+        if(($this->Auth->user('role') === 'superadmin')  || ($this->Auth->user('role') === 'admin')) {
+	        $this->Auth->allow();
+	    } elseif ($this->Auth->user('role') === 'usuario') { 
+	        $this->Auth->allow('index', 'view');
+	    } 
+    }
+    
+    public function index() {
 		$this->Alumno->recursive = 0;
 		$this->paginate['Alumno']['limit'] = 4;
-		$this->paginate['Alumno']['order'] = array('Alumno.id' => 'asc');
-		//$this->paginate['Alumno']['conditions'] = array('Alumno.status' => 1);
-		//$this->set('alumnos', $this->paginate());
+		$this->paginate['Alumno']['order'] = array('Alumno.id' => 'ASC');
+		$this->paginate['Alumno']['conditions'] = array('Alumno.user_id' => $this->Auth->user('id'));
+		
+		$estadoInscripcion = $this->Alumno->Inscripcion->find('list', array('fields'=>array('estado')));
 		$this->redirectToNamed();
 		$conditions = array();
-
-		$activeLetter = isset($this->params['named']['letter']) ? $this->params['named']['letter']: '';
-		$letters = array('A','B','C','D','E','F','G','H',
-						 'I','J','K','L','M','N','O','P',
-						 'Q','R','S','T','U','V','W','X','Y','Z');
-		
-		$alumnos = isset($activeLetter)? $this->paginate('Alumno', array('Alumno.apellidos LIKE ' => $activeLetter.'%')) : $this->paginate();
-		$urlArgs = array('url' => $this->params['named']);
-		
-		if(!empty($this->params['named']['nombre_completo_alumno']))
-		{
+        if(!empty($this->params['named']['nombre_completo_alumno'])){
 			$conditions['Alumno.nombre_completo_alumno ='] = $this->params['named']['nombre_completo_alumno'];
 		}
-
-		if(!empty($this->params['named']['documento_nro']))
-		{
+		if(!empty($this->params['named']['documento_nro'])){
 			$conditions['Alumno.documento_nro ='] = $this->params['named']['documento_nro'];
 		}
-		
+		//Evalúa si existe foto.
+		if(empty($this->params['named']['foto'])){
+			$foto = 0;
+		} else {
+			$foto = 1;
+		}
 		$alumnos = $this->paginate('Alumno', $conditions);
-		$this->set(compact('alumnos','letters','activeLetter','urlArgs'));
+		$this->set(compact('alumnos', 'estadoInscripcion', 'foto'));
 	}
 
-	function view($id = null) {
+	public function view($id = null) {
 		if (!$id) {
 			$this->Session->setFlash('Alumno no valido', 'default', array('class' => 'alert alert-danger'));
 			$this->redirect(array('action' => 'index'));
 		}
+		$options = array('conditions' => array('Alumno.' . $this->Alumno->primaryKey => $id));
+		$this->pdfConfig = array(
+			'download' => true,
+			'filename' => 'alumno_' . $id .'.pdf'
+		);
 		$this->set('alumno', $this->Alumno->read(null, $id));
-				
-	}
+		
+        //Genera nombres en el view.
+		$notaCicloId = $this->Alumno->Nota->find('list', array('fields'=>array('ciclo_id')));
+		$this->loadModel('Ciclo');
+		$cicloNombre = $this->Ciclo->find('list', array('fields'=>array('nombre'), 'conditions'=>array('id'=>$notaCicloId)));
+		$notaMateriaId = $this->Alumno->Nota->find('list', array('fields'=>array('materia_id')));
+		$this->loadModel('Materia');
+		$materiaAlia = $this->Materia->find('list', array('fields'=>array('alia'), 'conditions'=>array('id'=>$notaMateriaId)));
+		//Evalúa si existe foto.
+		if(empty($this->params['named']['foto'])){
+			$foto = 0;
+		} else {
+			$foto = 1;
+		}
+		$this->set(compact('cicloNombre', 'foto', 'materiaAlia'));
+    }
 	
-
-	function add() {
+	public function add() {
 		  //abort if cancel button was pressed  
           if(isset($this->params['data']['cancel'])){
                 $this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
@@ -57,6 +80,20 @@ class AlumnosController extends AppController {
 		  }
           if (!empty($this->data)) {
 			$this->Alumno->create();
+			
+			// Antes de guardar pasa a mayúsculas el nombre completo.
+			$apellidosMayuscula = strtoupper($this->request->data['Alumno']['apellidos']);
+			$nombresMayuscula = strtoupper($this->request->data['Alumno']['nombres']);
+			// Genera el nombre completo en mayúsculas y se deja en los datos que se intentaran guardar
+			$this->request->data['Alumno']['apellidos'] = $apellidosMayuscula;
+			$this->request->data['Alumno']['nombres'] = $nombresMayuscula;
+            // Antes de guardar calcula la edad
+			$day = $this->request->data['Alumno']['fecha_nac']['day'];
+			$month = $this->request->data['Alumno']['fecha_nac']['month'];
+			$year = $this->request->data['Alumno']['fecha_nac']['year'];
+			// Calcula la edad y se deja en los datos que se intentaran guardar
+			$this->request->data['Alumno']['edad'] = $this->__getEdad($day, $month, $year);
+			
 			if ($this->Alumno->save($this->request->data)) {
 				$this->Session->setFlash('El alumno ha sido grabado', 'default', array('class' => 'alert alert-success'));
 				$inserted_id = $this->Alumno->id;
@@ -65,10 +102,9 @@ class AlumnosController extends AppController {
 				$this->Session->setFlash('El alumno no fue grabado. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
-
 	}
 
-	function edit($id = null) {
+	public function edit($id = null) {
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash('Alumno no valido', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action' => 'index'));
@@ -79,7 +115,21 @@ class AlumnosController extends AppController {
                 $this->Session->setFlash('Los cambios no fueron guardados. Edición cancelada.', 'default', array('class' => 'alert alert-warning'));
                 $this->redirect( array( 'action' => 'index' ));
 		  }
-    	  if ($this->Alumno->save($this->data)) {
+    	  
+          // Antes de guardar pasa a mayúsculas el nombre completo.
+		  $apellidosMayuscula = strtoupper($this->request->data['Alumno']['apellidos']);
+		  $nombresMayuscula = strtoupper($this->request->data['Alumno']['nombres']);
+		  // Genera el nombre completo en mayúsculas y se deja en los datos que se intentaran guardar
+		  $this->request->data['Alumno']['apellidos'] = $apellidosMayuscula;
+		  $this->request->data['Alumno']['nombres'] = $nombresMayuscula;
+    	  // Antes de guardar calcula la edad
+		  $day = $this->request->data['Alumno']['fecha_nac']['day'];
+		  $month = $this->request->data['Alumno']['fecha_nac']['month'];
+		  $year = $this->request->data['Alumno']['fecha_nac']['year'];
+		  // Calcula la edad y se deja en los datos que se intentaran guardar
+		  $this->request->data['Alumno']['edad'] = $this->__getEdad($day, $month, $year);
+		  
+		  if ($this->Alumno->save($this->data)) {
 				$this->Session->setFlash('El alumno ha sido grabado', 'default', array('class' => 'alert alert-success'));
 				$inserted_id = $this->Alumno->id;
 				$this->redirect(array('action' => 'view', $inserted_id));
@@ -92,7 +142,7 @@ class AlumnosController extends AppController {
 		}
 	}
 
-	function delete($id = null) {
+	public function delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash('Id no valido para el alumno', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action'=>'index'));
@@ -103,6 +153,17 @@ class AlumnosController extends AppController {
 		}
 		$this->Session->setFlash('El alumno no fue borrado', 'default', array('class' => 'alert alert-danger'));
 		$this->redirect(array('action' => 'index'));
+	}
+	
+	//Métodos Privados
+	
+	private function __getEdad($day, $month, $year){
+		$year_diff  = date("Y") - $year;
+		$month_diff = date("m") - $month;
+		$day_diff   = date("d") - $day;
+		if ($day_diff < 0 && $month_diff==0) $year_diff--;
+		if ($day_diff < 0 && $month_diff < 0) $year_diff--;
+                return $year_diff;
 	}
 }
 ?>

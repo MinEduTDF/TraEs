@@ -1,8 +1,4 @@
-<!-- *********** Acordeon ************* -->
 <?php echo $this->Html->script('acordeon'); ?>
-<!-- ************************************** -->
-
-
 <!-- start main -->
 <div class="TituloSec"><?php echo ($empleado['Empleado']['apellidos']).' '.($empleado['Empleado']['nombres']); ?></div>
 <div id="ContenidoSec">
@@ -11,12 +7,19 @@
    <div class="col-md-8">	
 	 <div class="unit">
  		<div class="row perfil">
-
-    <div class="col-md-4 col-sm-6 col-xs-12 thumbnail text-center">
-  	    <!--<?php echo $this->Html->image('../files/empleado/foto/' . $empleado['Empleado']['foto_dir'] . '/' . 'vga_' .$empleado['Empleado']['foto'], array('class' => 'img-thumbnail img-responsive')); ?>-->
-	   	<img src="http://ipam.com.br/2012/fotos/image/facebook-silueta-perfil-300x203.jpg"/>
-  	</div>
-
+                 <div class="col-md-4 col-sm-6 col-xs-12 thumbnail text-center">
+<!-- Sí no tiene foto presenta imagen de avatar según el sexo. -->
+			        <?php if(($foto == 0) && ($empleado['Empleado']['sexo'] == 'MASC')): ?>
+			        <?php echo $this->Html->image('../img/avatar-masculino.png', array('class' => 'img-thumbnail img-responsive img-rounded')); ?>
+			        <?php endif; ?>
+			        <?php if(($foto == 0) && ($empleado['Empleado']['sexo'] == 'FEM')): ?>
+			        <?php echo $this->Html->image('../img/avatar-femenino.png', array('class' => 'img-thumbnail img-responsive img-rounded')); ?>
+			        <?php endif; ?>
+			        <!-- Sí tiene foto la presenta. -->
+			        <?php if($foto == 1): ?>
+			        <?php echo $this->Html->image('../files/alumno/foto/' . $empleado['Empleado']['foto_dir'] . '/' . 'thumb_' .$empleado['Empleado']['foto'], array('class' => 'img-thumbnail img-responsive img-rounded')); ?>
+			        <?php endif; ?>
+  	             </div>
    <div class="col-md-8 col-sm-6 col-xs-8">	
 			<b><?php echo __('Nombres: '); ?></b>
 			<?php echo $empleado['Empleado']['nombres']; ?></p>
@@ -37,9 +40,12 @@
 			
             <b><?php echo __('Email: '); ?></b>
 			<?php echo ($this->Html->link($empleado['Empleado']['email'],'mailto:'.$empleado['Empleado']['email'])); ?></p>
+            
+            <b><?php echo __('Observaciones: '); ?></b>
+			<?php echo $empleado['Empleado']['observaciones']; ?></p>
           </div>
  	</div>
- </div>
+  </div>
 </div>
 
 <!-- star sidebar -->
@@ -48,8 +54,8 @@
  			<div class="subtitulo">Opciones</div>
 			<div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $empleado['Empleado']['id'])); ?></div>
 			<div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $empleado['Empleado']['id']), null, sprintf(__('Esta seguro de borrar al empleado %s?'), $empleado['Empleado']['nombre_completo_empleado'])); ?></div>
-			<div class="opcion"><?php echo $this->Html->link(__('Exportar a PDF'), array('action' => 'view', $empleado['Empleado']['id'], 'ext' => 'pdf')); ?></div>
-	</div>
+	        <div class="opcion"><?php echo $this->Html->link(__('Listar Agentes'), array('action' => 'index')); ?></div>
+	 </div>
   </div>
 </div> 
  <!-- end main -->
@@ -330,9 +336,8 @@
 	</div>
 </div>-->
 <!-- Fin Inventarios Relacionados -->
-
 <!-- Usuarios Relacionados -->
-<div id="click_01" class="titulo_acordeon">Usuarios Relacionados</div>
+<div id="click_01" class="titulo_acordeon">Usuarios Relacionados <span class="caret"></span></div>
 <div id="acordeon_01">
 		<div class="row">
 	<?php if (!empty($empleado['User'])):?>
@@ -340,14 +345,13 @@
 	<?php foreach ($empleado['User'] as $user): ?>
 	<div class="col-md-6">
 		<div class="unit">
-			<?php echo '<b>Id:</b> '.$user['id'];?><br>
-			<?php echo '<b>Nombre de Usuario:</b> '.$user['username'];?><br>
+			<?php echo '<b>Nombre de Usuario:</b> '.$this->Html->link($user['username'], array('controller' => 'users', 'action' => 'view', $user['id']));?><br>
 			<?php echo '<b>Puesto:</b> '.$user['puesto'];?><br>
             <!--<?php echo '<b>Centro:</b> '.$user['centro_id'];?><br>-->
             <div class="text-right">
-            <?php echo $this->Html->link(__('Editar'), array('controller' => 'users', 'action' => 'edit', $user['id']), array('class' => 'btn btn-warning')); ?>
-			<?php echo $this->Html->link(__('Ver'), array('controller' => 'users', 'action' => 'view', $user['id']), array('class' => 'btn btn-success')); ?>
-			<?php echo $this->Html->link(__('Borrar'), array('controller' => 'users', 'action' => 'delete', $user['id']), array('class' => 'btn btn-danger')); ?>
+            <?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-edit"></i>'), array('controller' => 'users', 'action' => 'edit', $user['id']), array('class' => 'btn btn-warning', 'escape' => false)); ?>
+			<?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-eye-open"></i>'), array('controller' => 'users', 'action' => 'view', $user['id']), array('class' => 'btn btn-success','escape' => false)); ?>
+			<?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-trash"></i>'), array('controller' => 'users', 'action' => 'delete', $user['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
 			</div>
 		</div>
 	</div>

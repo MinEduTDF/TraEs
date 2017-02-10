@@ -1,14 +1,31 @@
 <?php
+App::uses('AppController', 'Controller');
+
 class CursosController extends AppController {
 
 	var $name = 'Cursos';
-    var $helpers = array('Session');
-	var $components = array('Auth','Session');
+    var $helpers = array('Form', 'Time', 'Js');
+	var $components = array('Session', 'RequestHandler');
 	var $paginate = array('Curso' => array('limit' => 4, 'order' => 'Curso.anio ASC'));
 
+	public function beforeFilter() {
+        parent::beforeFilter();
+        //Si el usuario tiene un rol de superadmin le damos acceso a todo.
+        //Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
+        if(($this->Auth->user('role') === 'superadmin')  || ($this->Auth->user('role') === 'admin')) {
+	        $this->Auth->allow();
+	    } elseif ($this->Auth->user('role') === 'usuario') { 
+	        $this->Auth->allow('index', 'view');
+	    } 
+    } 
+
 	function index() {
-		$this->Curso->recursive = 0;
-		$this->set('cursos', $this->paginate());
+		$this->Curso->recursive = 1;
+		$this->paginate['Curso']['limit'] = 4;
+		$this->paginate['Curso']['order'] = array('Curso.anio' => 'ASC');
+		$centroId = $this->getUserCentroId();
+		$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $centroId);
+		
 		$this->redirectToNamed();
 		$conditions = array();
 		
@@ -24,18 +41,8 @@ class CursosController extends AppController {
 		{
 			$conditions['Curso.turno ='] = $this->params['named']['turno'];
 		}
-		/*if(!empty($this->params['named']['day_f']) && !empty($this->params['named']['month_f']) && !empty($this->params['named']['year_f']))
-		{
-			$conditions['Inscripcion.fechaInscripcion >='] = $this->params['named']['year_f'].'-'.$this->params['named']['month_f'].'-'.$this->params['named']['day_f'];
-		}
-		if(!empty($this->params['named']['day_t']) && !empty($this->params['named']['month_t']) && !empty($this->params['named']['year_t']))
-		{
-			$conditions['Inscripcion.fechaInscripcion <='] = $this->params['named']['year_t'].'-'.$this->params['named']['month_t'].'-'.$this->params['named']['day_t'];
-		}
-		*/
 		$cursos = $this->paginate('Curso',$conditions);
 		$this->set(compact('cursos'));
-		
 	}
 
 	function view($id = null) {
@@ -44,23 +51,42 @@ class CursosController extends AppController {
 			$this->redirect(array('action' => 'index'));
 		}
 		$this->set('curso', $this->Curso->read(null, $id));
+		
+		//genera nombres para datos relacionados.
+		$inscripcionAlumnoId = $this->Curso->Inscripcion->find('list', array('fields'=>array('alumno_id')));
+		$this->loadModel('Alumno');
+		$alumnoNombre = $this->Alumno->find('list', array('fields'=>array('nombre_completo_alumno'), 'conditions'=>array('id'=>$inscripcionAlumnoId)));
+		$this->set(compact('alumnoNombre'));
+
+		//genera número de matriculados.
+		$cursoId = $this->Curso->id;
+		$alumnosInscriptos = $this->Curso->CursosInscripcion->find('list', array('fields'=>array('curso_id'), 'conditions'=>array('CursosInscripcion.curso_id'=>$cursoId)));
+		$matriculados = (count($alumnosInscriptos));
+
+		$this->set(compact('alumnoNombre', 'cicloNombre', 'matriculados'));
 	}
 
 	function add() {
-		  //abort if cancel button was pressed  
-          if(isset($this->params['data']['cancel'])){
+		//abort if cancel button was pressed  
+        if(isset($this->params['data']['cancel'])){
                 $this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
                 $this->redirect( array( 'action' => 'index' ));
-		  }
+		}
 		if (!empty($this->data)) {
 			$this->Curso->create();
+			
+			//Antes de guardar obtiene el ciclo actual.
+			$this->request->data['Curso']['ciclo_id'] = $this->getLastCicloId();
+			//Antes de guardar obtiene el centro del que pertenece el empleado.
+			$this->request->data['Curso']['centro_id'] = $this->Auth->user('centro_id');
+
 			if ($this->Curso->save($this->data)) {
-				$this->Session->setFlash('El curso ha sido grabado.', 'default', array('class' => 'alert alert-success'));
+				$this->Session->setFlash('La sección ha sido grabada.', 'default', array('class' => 'alert alert-success'));
 				//$this->redirect(array('action' => 'index'));
 				$inserted_id = $this->Curso->id;
 				$this->redirect(array('action' => 'view', $inserted_id));
 			} else {
-				$this->Session->setFlash('El curso no fué grabado. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
+				$this->Session->setFlash('La sección no fué grabada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
 		$centros = $this->Curso->Centro->find('list');
@@ -72,7 +98,7 @@ class CursosController extends AppController {
 
 	function edit($id = null) {
 		if (!$id && empty($this->data)) {
-			$this->Session->setFlash('Curso no valido.', 'default', array('class' => 'alert alert-warning'));
+			$this->Session->setFlash('Sección no valida.', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action' => 'index'));
 		}
 		if (!empty($this->data)) {
@@ -82,12 +108,12 @@ class CursosController extends AppController {
                $this->redirect( array( 'action' => 'index' ));
 		  }
 		  if ($this->Curso->save($this->data)) {
-				$this->Session->setFlash('El curso ha sido grabado.', 'default', array('class' => 'alert alert-success'));
+				$this->Session->setFlash('La sección ha sido grabada.', 'default', array('class' => 'alert alert-success'));
 				//$this->redirect(array('action' => 'index'));
 				$inserted_id = $this->Curso->id;
 				$this->redirect(array('action' => 'view', $inserted_id));
 			} else {
-				$this->Session->setFlash('El curso no fue grabado. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
+				$this->Session->setFlash('La sección no fue grabada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
 		if (empty($this->data)) {
@@ -102,14 +128,14 @@ class CursosController extends AppController {
 
 	function delete($id = null) {
 		if (!$id) {
-			$this->Session->setFlash('Id no valido para curso', 'default', array('class' => 'alert alert-warning'));
+			$this->Session->setFlash('Id no valido para sección', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action'=>'index'));
 		}
 		if ($this->Curso->delete($id)) {
-			$this->Session->setFlash('El curso ha sido borrado', 'default', array('class' => 'alert alert-success'));
+			$this->Session->setFlash('La sección ha sido borrada', 'default', array('class' => 'alert alert-success'));
 			$this->redirect(array('action'=>'index'));
 		}
-		$this->Session->setFlash('El curso no fue borrado. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
+		$this->Session->setFlash('La sección no fue borrada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 		$this->redirect(array('action' => 'index'));
 	}
 }

@@ -1,71 +1,56 @@
-<!-- *********** Acordeon ************* -->
-<?php echo $this->Html->script('acordeon'); ?>
-<!-- ************************************** -->
-
+<?php echo $this->Html->script(array('acordeon', 'slider')); ?>
+<?php echo $this->Html->css('slider.css'); ?>
 <!-- start main -->
 <div class="TituloSec"><?php echo ($centro['Centro']['sigla']); ?></div>
 <div id="ContenidoSec">
-
-<div class="row">
-   <div class="col-md-8">	
-	 <div class="unit">
- 		<div class="row perfil">
-  		
-  	<!--<div class="col-md-4 col-sm-6 col-xs-12 thumbnail text-center">
-  		<img src="http://ipam.com.br/2012/fotos/image/facebook-silueta-perfil-300x203.jpg"/>
-  	</div>-->
-
-   <div class="col-md-8 col-sm-6 col-xs-8">	
-			<!--<b><?php echo __('Nombre: '); ?></b>
-			<?php echo ($centro['Centro']['sigla']); ?></p>-->
-
-			<b><?php echo __('Director: '); ?></b>
-    		<?php echo $centro['Centro']['equipoDirectivo']; ?></p>
-
-			<b><?php echo __('Ciudad: '); ?></b>
-
-			<?php echo $centro['Centro']['ciudad']; ?></p>
-
-            <b><?php echo __('Domicilio: '); ?></b>
-
-			<?php echo $centro['Centro']['direccion']; ?></p>
-
-   </div><div class="col-md-8 col-sm-6 col-xs-8">
-						
-            <b><?php echo __('Telefono: '); ?></b>
-
-			<?php echo $centro['Centro']['telefono']; ?></p>
-            
-            <b><?php echo __('Email: '); ?></b>
-
-			<?php echo ($this->Html->link($centro['Centro']['email'],'mailto:'.$centro['Centro']['email'])); ?></p>
-            
-            <b><?php echo __('URL: '); ?></b>
-
-			<?php echo ($this->Html->link($centro['Centro']['url'],'href:'.$centro['Centro']['url'])); ?></p>
-          </div>
- 	</div>
- </div>
-</div>
-
+    <div class="row">
+    	<div class="col-md-8">	
+	 		<div class="unit">
+ 				<div class="row perfil">
+			  	<!--<div class="col-md-4 col-sm-6 col-xs-12 thumbnail text-center">
+			  		<img src="http://ipam.com.br/2012/fotos/image/facebook-silueta-perfil-300x203.jpg"/>
+			  	</div>-->
+   					<div class="col-md-8 col-sm-6 col-xs-8">	
+						<!--<b><?php echo __('Nombre: '); ?></b>
+						<?php echo ($centro['Centro']['sigla']); ?></p>-->
+						<b><?php echo __('Director: '); ?></b>
+			    			<?php echo $centro['Centro']['equipoDirectivo']; ?></p>
+						<b><?php echo __('Ciudad: '); ?></b>
+							<?php echo $centro['Centro']['ciudad']; ?></p>
+			            <b><?php echo __('Domicilio: '); ?></b>
+							<?php echo $centro['Centro']['direccion']; ?></p>
+   					</div>
+   					<div class="col-md-8 col-sm-6 col-xs-8">
+					    <b><?php echo __('Telefono: '); ?></b>
+							<?php echo $centro['Centro']['telefono']; ?></p>
+                        <b><?php echo __('Email: '); ?></b>
+							<?php echo ($this->Html->link($centro['Centro']['email'],'mailto:'.$centro['Centro']['email'])); ?></p>
+                        <b><?php echo __('URL: '); ?></b>
+							<?php echo ($this->Html->link($centro['Centro']['url'],'href:'.$centro['Centro']['url'])); ?></p>
+          			</div>
+ 				</div>
+ 			</div>
+		</div>
 <!-- star sidebar -->
-<div class="col-md-4">
- <div class="unit">
- 		<div class="subtitulo">Opciones</div>
-		<div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $centro['Centro']['id'])); ?></div>
-		<div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $centro['Centro']['id']), null, sprintf(__('Esta seguro de borrar el centro %s?'), $centro['Centro']['sigla'])); ?></div>
-			<div class="opcion"><?php echo $this->Html->link(__('Exportar a PDF'), array('action' => 'view', $centro['Centro']['id'], 'ext' => 'pdf')); ?></div>
-		<!--<div class="opcion"><?php echo $this->Html->link(__('Listar Centros'), array('action' => 'index')); ?></div>
-        <div class="opcion"><?php echo $this->Html->link(__('Listar Titulaciones'), array('controller' => 'titulacions', 'action' => 'index')); ?></div>	
-        <div class="opcion"><?php echo $this->Html->link(__('Listar Cursos'), array('controller' => 'cursos', 'action' => 'index')); ?></div>	
-		<div class="opcion"><?php echo $this->Html->link(__('Listar Alumnos'), array('controller' => 'alumnos', 'action' => 'index')); ?></div>
-		<div class="opcion"><?php echo $this->Html->link(__('Listar Inscripciones'), array('controller' => 'inscripcions', 'action' => 'index')); ?></div>
-        <div class="opcion"><?php echo $this->Html->link(__('Listar Inasistencias'), array('controller' => 'inasistencias', 'action' => 'index')); ?></div>-->
-  </div>
- </div>
-</div> 	
+		<div class="col-md-4">
+ 			<div class="unit">
+ 				<div class="subtitulo">Opciones</div>
+				<div class="opcion"><?php echo $this->Html->link(__('Listar Centros'), array('controller' => 'centros', 'action' => 'index')); ?></div>
+				<!--<div class="opcion"><?php echo $this->Html->link(__('Listar Ciclos'), array('controller' => 'ciclos', 'action' => 'index')); ?></div>
+		        <div class="opcion"><?php echo $this->Html->link(__('Listar Titulaciones'), array('controller' => 'titulacions', 'action' => 'index')); ?></div>	
+                <div class="opcion"><?php echo $this->Html->link(__('Listar Cursos'), array('controller' => 'cursos', 'action' => 'index')); ?></div>	
+		        <div class="opcion"><?php echo $this->Html->link(__('Listar Alumnos'), array('controller' => 'alumnos', 'action' => 'index')); ?></div>
+		        <div class="opcion"><?php echo $this->Html->link(__('Listar Inscripciones'), array('controller' => 'inscripcions', 'action' => 'index')); ?></div>
+                <!--<div class="opcion"><?php echo $this->Html->link(__('Listar Inasistencias'), array('controller' => 'inasistencias', 'action' => 'index')); ?></div>-->
+			  <?php if($current_user['role'] == 'superadmin'): ?>	
+				<!--<div class="opcion"><?php echo $this->Html->link(__('Exportar a PDF'), array('action' => 'view', $centro['Centro']['id'], 'ext' => 'pdf')); ?></div>-->
+				<div class="opcion"><?php echo $this->Html->link(__('Editar'), array('action' => 'edit', $centro['Centro']['id'])); ?></div>
+		        <div class="opcion"><?php echo $this->Html->link(__('Borrar'), array('action' => 'delete', $centro['Centro']['id']), null, sprintf(__('Esta seguro de borrar el centro %s?'), $centro['Centro']['sigla'])); ?></div>
+		      <?php endif; ?>  
+  			</div>
+ 		</div>
+	</div> 	
 <!-- end sidebar -->
-
 <!--<div class="related">
 	<h3><?php echo __('Cargos Relacionados');?></h3>
 	<?php if (!empty($centro['Cargo'])):?>
@@ -134,58 +119,37 @@
 		</ul>
 	</div>
 </div>-->
-<!--<div class="related">
-	<h3><?php echo __('Cursos Relacionados');?></h3>
+<!-- Cursos Relacionados --> 
+<div id="click_01" class="titulo_acordeon">Cursos Relacionados <span class="caret"></span></div>
+<div id="acordeon_01">
+	<div class="row">
 	<?php if (!empty($centro['Curso'])):?>
-	<table cellpadding = "0" cellspacing = "0">
-	<tr>
-		<th><?php echo __('Id'); ?></th>
-		<th><?php echo __('Anio'); ?></th>
-		<th><?php echo __('Division'); ?></th>
-		<th><?php echo __('Turno'); ?></th>
-		<th><?php echo __('AulaNro'); ?></th>
-		<th><?php echo __('plazas'); ?></th>
-		<th><?php echo __('organizacion_cursada'); ?></th>
-        <th><?php echo __('Centro Id'); ?></th>
-		<th><?php echo __('Titulacion Id'); ?></th>
-		<th><?php echo __('Modalidad Id'); ?></th>
-		<th class="actions"><?php echo __('Opciones');?></th>
-	</tr>
-	<?php
-		$i = 0;
-		foreach ($centro['Curso'] as $curso):
-			$class = null;
-			if ($i++ % 2 == 0) {
-				$class = ' class="altrow"';
-			}
-		?>
-		<tr<?php echo $class;?>>
-			<td><?php echo $curso['id'];?></td>
-			<td><?php echo $curso['anio'];?></td>
-			<td><?php echo $curso['division'];?></td>
-			<td><?php echo $curso['turno'];?></td>
-			<td><?php echo $curso['aulaNro'];?></td>
-			<td><?php echo $curso['plazas'];?></td>
-            <td><?php echo $curso['organizacion_cursada'];?></td>
-			<td><?php echo ($this->Html->link($curso['centro_id'], array('controller' => 'centros', 'action' => 'view', $curso['centro_id'])));?></td>
-			<td><?php echo ($this->Html->link($curso['titulacion_id'], array('controller' => 'titulacions', 'action' => 'view', $curso['titulacion_id'])));?></td>
-			<td><?php echo ($this->Html->link($curso['modalidad_id'], array('controller' => 'modalidads', 'action' => 'view', $curso['modalidad_id'])));?></td>
-			<td class="actions">
-				<?php echo $this->Html->link(__('Ver'), array('controller' => 'cursos', 'action' => 'view', $curso['id'])); ?>
-				<?php echo $this->Html->link(__('Editar'), array('controller' => 'cursos', 'action' => 'edit', $curso['id'])); ?>
-				<?php echo $this->Html->link(__('Borrar'), array('controller' => 'cursos', 'action' => 'delete', $curso['id']), null, sprintf(__('Are you sure you want to delete # %s?'), $curso['id'])); ?>
-			</td>
-		</tr>
-	<?php endforeach; ?>
-	</table>
-<?php endif; ?>
-
-	<div class="actions">
-		<ul>
-			<li><?php echo $this->Html->link(__('Nuevo Curso'), array('controller' => 'cursos', 'action' => 'add'));?> </li>
-		</ul>
-	</div>
-</div>-->
+		<div class="col-xs-12 col-sm-6 col-md-8">
+			<?php foreach ($centro['Curso'] as $curso): ?>
+            <div class="col-md-6">
+                    <div class="unit">
+                        <?php echo '<b>Año:</b> '.$curso['anio'];?><br>
+                        <?php echo '<b>División:</b> '.$curso['division'];?><br>
+                        <?php echo '<b>Turno:</b> '.$curso['turno'];?><br>
+                        <!--<?php echo '<b>Tipo:</b> '.$curso['tipo'];?><br>
+                        <?php echo '<b>Cursada:</b> '.$curso['organizacion_cursada'];?><br>
+                        <?php echo '<b>Titulación:</b> '.($this->Html->link($curso['titulacion_id'], array('controller' => 'titulacions', 'action' => 'view', $curso['titulacion_id'])));?><br>-->
+                        <div class="text-right">
+                            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'cursos', 'action' => 'view', $curso['id']), array('class' => 'btn btn-success','escape' => false)); ?>
+                          <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
+                            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'cursos', 'action' => 'edit', $curso['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
+                            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'cursos', 'action' => 'delete', $curso['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
+                          <?php endif; ?>  
+                        </div>
+                    </div>
+                </div>
+		        <?php endforeach; ?>
+			</div>
+			<?php else: echo '<div class="col-md-12"><div class="unit text-center">No se encuentran relaciones.</div></div>'; ?>
+            <?php endif; ?>
+	  </div>
+</div>
+<!-- end Cursos Relacionados -->
 <!--<div class="related">
 	<h3><?php echo __('Modalidades Relacionadas');?></h3>
 	<?php if (!empty($centro['Modalidad'])):?>
@@ -226,9 +190,8 @@
 		</ul>
 	</div>
 </div>-->
-
 <!-- Titulaciones Relacionadas -->
-<div id="click_01" class="titulo_acordeon">Titulaciones Relacionadas</div>
+<!--<div id="click_01" class="titulo_acordeon">Titulaciones Relacionadas</div>
 <div id="acordeon_01">
 		<div class="row">
   			<div class="col-xs-8 col-sm-6 col-md-8">
@@ -256,59 +219,42 @@
 		<?php endif; ?>
 		</div>
 	</div>
-</div>
-<!-- end Titulaciones Relacionadas -->
-
-<!--<div class="related">
-	<h3><?php echo __('Inscripciones Relacionadas');?></h3>
-	<?php if (!empty($centro['Inscripcion'])):?>
-	<table cellpadding = "0" cellspacing = "0">
-	<tr>
-		<th><?php echo __('Id'); ?></th>
-		<th><?php echo __('Tipo'); ?></th>
-		<th><?php echo __('Fecha'); ?></th>
-		<th><?php echo __('Alumno Id'); ?></th>
-		<th><?php echo __('Ciclo Id'); ?></th>
-		<th><?php echo __('Centro Id'); ?></th>
-		<th><?php echo __('Curso Id'); ?></th>
-		<th><?php echo __('Materia Id'); ?></th>
-		<th><?php echo __('Empleado Id'); ?></th>
-		<th class="actions"><?php echo __('Opciones');?></th>
-	</tr>
-	<?php
-		$i = 0;
-		foreach ($centro['Inscripcion'] as $inscripcion):
-			$class = null;
-			if ($i++ % 2 == 0) {
-				$class = ' class="altrow"';
-			}
-		?>
-		<tr<?php echo $class;?>>
-			<td><?php echo $inscripcion['id'];?></td>
-			<td><?php echo $inscripcion['tipoInscripcion'];?></td>
-			<td><?php echo $this->Html->formatTime($inscripcion['fechaInscripcion']);?></td>
-			<td><?php echo ($this->Html->link($inscripcion['alumno_id'], array('controller' => 'alumnos', 'action' => 'view', $inscripcion['alumno_id'])));?></td>
-			<td><?php echo ($this->Html->link($inscripcion['ciclo_id'], array('controller' => 'ciclos', 'action' => 'view', $inscripcion['ciclo_id'])));?></td>
-			<td><?php echo ($this->Html->link($inscripcion['centro_id'], array('controller' => 'centros', 'action' => 'view', $inscripcion['centro_id'])));?></td>
-			<td><?php echo ($this->Html->link($inscripcion['curso_id'], array('controller' => 'cursos', 'action' => 'view', $inscripcion['curso_id'])));?></td>
-			<td><?php echo ($this->Html->link($inscripcion['materia_id'], array('controller' => 'materias', 'action' => 'view', $inscripcion['materia_id'])));?></td>
-			<td><?php echo ($this->Html->link($inscripcion['empleado_id'], array('controller' => 'empleados', 'action' => 'view', $inscripcion['empleado_id'])));?></td>
-			<td class="actions">
-				<?php echo $this->Html->link(__('Ver'), array('controller' => 'inscripcions', 'action' => 'view', $inscripcion['id'])); ?>
-				<?php echo $this->Html->link(__('Editar'), array('controller' => 'inscripcions', 'action' => 'edit', $inscripcion['id'])); ?>
-				<?php echo $this->Html->link(__('Borrar'), array('controller' => 'inscripcions', 'action' => 'delete', $inscripcion['id']), null, sprintf(__('Are you sure you want to delete # %s?'), $inscripcion['id'])); ?>
-			</td>
-		</tr>
-	<?php endforeach; ?>
-	</table>
-<?php endif; ?>
-
-	<div class="actions">
-		<ul>
-			<li><?php echo $this->Html->link(__('Nueva Inscripcion'), array('controller' => 'inscripcions', 'action' => 'add'));?> </li>
-		</ul>
-	</div>
 </div>-->
+<!-- end Titulaciones Relacionadas -->
+<!-- Inscripciones Relacionadas -->
+	<div id="click_02" class="titulo_acordeon">Inscripciones Relacionadas <span class="caret"></span></div>
+	<div id="acordeon_02">
+		<div class="row">
+			<?php if (!empty($centro['Inscripcion'])):?>
+  			<div class="col-xs-12 col-sm-6 col-md-8">
+	<?php foreach ($centro['Inscripcion'] as $inscripcion):	?>
+	<div class="col-md-6">
+		<div class="unit">
+			<!--<?php echo '<b>Ciclo id:</b> '.($this->Html->link($inscripcion['ciclo_id'], array('controller' => 'ciclos', 'action' => 'view', $inscripcion['ciclo_id'])));?><br>
+			<?php echo '<b>Tipo de alta:</b> '.$inscripcion['tipo_alta'];?><br>-->
+			<?php echo '<b>Fecha de alta:</b> '.$this->Html->formatTime($inscripcion['fecha_alta']);?><br>
+			<!--<?php echo '<b>Cursa:</b> '.$inscripcion['cursa'];?><br>
+            <?php echo '<b>Fecha de baja:</b> '.$this->Html->formatTime($inscripcion['fecha_baja']);?><br>
+			<?php echo '<b>Tipo de baja:</b> '.$inscripcion['tipo_baja'];?><br>
+            <?php echo '<b>Fecha de egreso:</b> '.$this->Html->formatTime($inscripcion['fecha_egreso']);?><br>
+            <!--<?php echo '<b>Nota:</b> '.$inscripcion['nota'];?><br>-->
+            <b>Estado:</b> <?php if($inscripcion['estado'] == "COMPLETA"){; ?><span class="label label-success"><?php echo $inscripcion['estado']; ?></span><?php } else{; ?><span class="label label-danger"><?php echo $inscripcion['estado']; ?></span><?php } ?></br>
+            <div class="text-right">
+            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'inscripcions', 'action' => 'view', $inscripcion['id']), array('class' => 'btn btn-success','escape' => false)); ?>
+            <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
+            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'inscripcions', 'action' => 'edit', $inscripcion['id']), array('class' => 'btn btn-warning','escape' => false)); ?>
+			<?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'inscripcions', 'action' => 'delete', $inscripcion['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
+			<?php endif; ?>
+			</div>
+		</div>
+	</div>
+		<?php endforeach; ?>
+			</div>
+		<?php else: echo '<div class="col-md-12"><div class="unit text-center">No se encuentran relaciones.</div></div>'; ?>
+		<?php endif; ?>
+	</div>
+</div>
+<!-- end Inscripciones Relacionadas -->
 <!--<div class="related">
 	<h3><?php echo __('Alumnos Relacionados');?></h3>
 	<?php if (!empty($centro['Alumno'])):?>
@@ -361,6 +307,7 @@
 		</ul>
 	</div>
 </div>
+<?php if($current_user['role'] == 'superadmin'): ?>
 <div class="related">
 	<h3><?php echo __('Related Usuarios');?></h3>
 	<?php if (!empty($centro['Usuario'])):?>
@@ -406,55 +353,31 @@
 			<li><?php echo $this->Html->link(__('Nuevo Usuario'), array('controller' => 'usuarios', 'action' => 'add'));?> </li>
 		</ul>
 	</div>
-</div>
-<div class="related">
-	<h3><?php echo __('Empleados Relacionados');?></h3>
-	<?php if (!empty($centro['Empleado'])):?>
-	<table cellpadding = "0" cellspacing = "0">
-	<tr>
-		<th><?php echo __('Id'); ?></th>
-		<th><?php echo __('Dni'); ?></th>
-		<th><?php echo __('Apellido'); ?></th>
-		<th><?php echo __('PrimerNombre'); ?></th>
-		<th><?php echo __('Direccion'); ?></th>
-		<th><?php echo __('Telefono'); ?></th>
-		<th><?php echo __('Email'); ?></th>
-		<th><?php echo __('Ciudad'); ?></th>
-		<th class="actions"><?php echo __('Opciones');?></th>
-	</tr>
-	<?php
-		$i = 0;
-		foreach ($centro['Empleado'] as $empleado):
-			$class = null;
-			if ($i++ % 2 == 0) {
-				$class = ' class="altrow"';
-			}
-		?>
-		<tr<?php echo $class;?>>
-			<td><?php echo $empleado['id'];?></td>
-			<td><?php echo $empleado['dni'];?></td>
-			<td><?php echo $empleado['apellido'];?></td>
-			<td><?php echo $empleado['primerNombre'];?></td>
-			<td><?php echo $empleado['direccion'];?></td>
-			<td><?php echo $empleado['telefono'];?></td>
-			<td><?php echo $empleado['email'];?></td>
-			<td><?php echo $empleado['ciudad'];?></td>
-			<td class="actions">
-				<?php echo $this->Html->link(__('Ver'), array('controller' => 'empleados', 'action' => 'view', $empleado['id'])); ?>
-				<?php echo $this->Html->link(__('Editar'), array('controller' => 'empleados', 'action' => 'edit', $empleado['id'])); ?>
-				<?php echo $this->Html->link(__('Borrar'), array('controller' => 'empleados', 'action' => 'delete', $empleado['id']), null, sprintf(__('Are you sure you want to delete # %s?'), $empleado['id'])); ?>
-			</td>
-		</tr>
-	<?php endforeach; ?>
-	</table>
-<?php endif; ?>
-
-	<div class="actions">
-		<ul>
-			<li><?php echo $this->Html->link(__('Nuevo Empleado'), array('controller' => 'empleados', 'action' => 'add'));?> </li>
-		</ul>
-	</div>
 </div>-->
-
-
-
+<!-- Empleados Relacionados -->
+<div id="click_03" class="titulo_acordeon">Usuarios Relacionados <span class="caret"></span></div>
+<div id="acordeon_03">
+		<div class="row">
+	<?php if (!empty($centro['User'])):?>
+  			<div class="col-xs-12 col-sm-6 col-md-8">
+	<?php foreach ($centro['User'] as $user): ?>
+	<div class="col-md-6">
+		<div class="unit">
+			<?php echo '<b>Nombre de Usuario:</b> '.$this->Html->link($user['username'], array('controller' => 'users', 'action' => 'view', $user['id']));?><br>
+			<?php echo '<b>Puesto:</b> '.$user['puesto'];?><br>
+            <!--<?php echo '<b>Centro:</b> '.$user['centro_id'];?><br>-->
+            <div class="text-right">
+            <?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-edit"></i>'), array('controller' => 'users', 'action' => 'edit', $user['id']), array('class' => 'btn btn-warning', 'escape' => false)); ?>
+			<?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-eye-open"></i>'), array('controller' => 'users', 'action' => 'view', $user['id']), array('class' => 'btn btn-success','escape' => false)); ?>
+			<?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-trash"></i>'), array('controller' => 'users', 'action' => 'delete', $user['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
+			</div>
+		</div>
+	</div>
+		<?php endforeach; ?>
+			</div>
+		<?php else: echo '<div class="col-md-12"><div class="unit text-center">No se encuentran relaciones.</div></div>'; ?>
+		<?php endif; ?>
+	</div>
+<?php endif; ?>
+</div>
+<!-- end Usuarios Relacionados -->

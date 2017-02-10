@@ -1,7 +1,13 @@
-CakePHP 2
+# TRAES con CakePHP 2.X
+
+/app/Plugin/CakePdf/*
+/app/Plugin/DebugKit/*
+/app/Plugin/Upload/*
+
+/Vendor/*
 
 /tmp/*
-/Vendor/*
+
 /Console
 
 !.htaccess

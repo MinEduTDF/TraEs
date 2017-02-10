@@ -4,24 +4,24 @@ App::uses('AppController', 'Controller');
 class EmpleadosController extends AppController {
 
 	var $name = 'Empleados';
-    var $helpers = array('Session');
-	public $components = array('Auth','Session', 'RequestHandler');
+    public $helpers = array('Form', 'Time', 'Js', 'TinyMCE.TinyMCE');
+	public $components = array('Session', 'Paginator', 'RequestHandler');
 	var $paginate = array('Empleado' => array('limit' => 3, 'order' => 'Empleado.id DESC'));
 	
+    public function beforeFilter() {
+        parent::beforeFilter();
+        //Si el usuario tiene un rol de superadmin le damos acceso a todo.
+        if($this->Auth->user('role') === 'superadmin') {
+	        $this->Auth->allow();
+	    }  
+    }
+
     function index() {
 		//$this->Empleado->recursive = 0;
 		$this->set('empleados', $this->paginate());
 		$this->redirectToNamed();
 		$conditions = array();
 				
-		$activeLetter = isset($this->params['named']['letter']) ? $this->params['named']['letter']: '';
-		$letters = array('A','B','C','D','E','F','G','H',
-						 'I','J','K','L','M','N','O','P',
-						 'Q','R','S','T','U','V','W','X','Y','Z');
-		
-		$empleados = isset($activeLetter)? $this->paginate('Empleado', array('Empleado.apellidos LIKE ' => $activeLetter.'%')) : $this->paginate();
-		$urlArgs = array('url' => $this->params['named']);
-		
 		if(!empty($this->params['named']['nombre_completo_empleado']))
 		{
 			$conditions['Empleado.nombre_completo_empleado ='] = $this->params['named']['nombre_completo_empleado'];
@@ -31,9 +31,14 @@ class EmpleadosController extends AppController {
 		{
 			$conditions['Empleado.documento_nro ='] = $this->params['named']['documento_nro'];
 		}
-
+        //Evalúa si existe foto.
+		if(empty($this->params['named']['foto'])){
+			$foto = 0;
+		} else {
+			$foto = 1;
+		}
 		$empleados = $this->paginate('Empleado', $conditions);
-		$this->set(compact('empleados','letters','activeLetter','urlArgs'));
+		$this->set(compact('empleados', 'foto'));
 	}
         		
     function view($id = null) {
@@ -41,7 +46,14 @@ class EmpleadosController extends AppController {
 			$this->Session->setFlash('Empleado no valido.', 'default', array('class' => 'alert alert-danger'));
 			$this->redirect(array('action' => 'index'));
 		}
+		//Evalúa si existe foto.
+		if(empty($this->params['named']['foto'])){
+			$foto = 0;
+		} else {
+			$foto = 1;
+		}
 		$this->set('empleado', $this->Empleado->read(null, $id));
+	    $this->set(compact('foto'));
 	}
 
 	function add() {
@@ -52,10 +64,18 @@ class EmpleadosController extends AppController {
 		  }
 		  if (!empty($this->data)) {
 			$this->Empleado->create();
+			
+            // Antes de guardar pasa a mayúsculas el nombre completo.
+			$apellidosMayuscula = strtoupper($this->request->data['Empleado']['apellidos']);
+			$nombresMayuscula = strtoupper($this->request->data['Empleado']['nombres']);
+			// Genera el nombre completo en mayúsculas y se deja en los datos que se intentaran guardar
+			$this->request->data['Empleado']['apellidos'] = $apellidosMayuscula;
+			$this->request->data['Empleado']['nombres'] = $nombresMayuscula;
+
 			if ($this->Empleado->save($this->data)) {
 				$this->Session->setFlash('El empleado ha sido grabado.', 'default', array('class' => 'alert alert-success'));
-				$inserted_id = $this->Empleado->id;
-				$this->redirect(array('action' => 'view', $inserted_id));
+				$inserted_id = $this->Inscripcion->id;
+					$this->redirect(array('action' => 'view', $inserted_id));
 			} else {
 				$this->Session->setFlash('El empleado no fué grabado. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
@@ -76,6 +96,14 @@ class EmpleadosController extends AppController {
                 $this->Session->setFlash('Los cambios no fueron guardados. Edición cancelada.', 'default', array('class' => 'alert alert-warning'));
                 $this->redirect( array( 'action' => 'index' ));
 		  }
+		 
+		  // Antes de guardar pasa a mayúsculas el nombre completo.
+		  $apellidosMayuscula = strtoupper($this->request->data['Empleado']['apellidos']);
+		  $nombresMayuscula = strtoupper($this->request->data['Empleado']['nombres']);
+		  // Genera el nombre completo en mayúsculas y se deja en los datos que se intentaran guardar
+		  $this->request->data['Empleado']['apellidos'] = $apellidosMayuscula;
+		  $this->request->data['Empleado']['nombres'] = $nombresMayuscula; 
+         
 		  if ($this->Empleado->save($this->data)) {
 				$this->Session->setFlash('El empleado ha sido grabado.', 'default', array('class' => 'alert alert-success'));
 				$this->redirect(array('action' => 'index'));

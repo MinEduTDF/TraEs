@@ -1,9 +1,11 @@
 <?php
+App::uses('AppModel', 'Model');
+
 class Ciclo extends AppModel {
 	var $name = 'Ciclo';
-        var $displayField = 'Ciclo';
+    var $displayField = 'nombre';
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
-
+	
 	var $hasMany = array(
 		'Inscripcion' => array(
 			'className' => 'Inscripcion',
@@ -108,53 +110,61 @@ class Ciclo extends AppModel {
     //Validaciones
 
                    var $validate = array(
-                   'ciclo' => array(
-                           'minLength' => array(
-                           'rule' => array('minLength', 4), 
-                           'allowEmpty' => false,       
-                           'message' => 'Indicar una opcion.'
-                           ),
-						   'isUnique' => array(
-	                       'rule' => 'isUnique',
-	                       'message' => 'Este nombre de ciclo esta siendo usado.'
+				   'created' => array(
+                         'required' => array(
+						 'rule' => 'notBlank',
+                         'required' => 'create',
+						 'message' => 'Indicar una fecha y hora.'
+                         )
+                   ),
+				   'nombre' => array(
+                         'required' => array(
+						 'rule' => 'notBlank',
+                         'required' => 'create',
+                         'message' => 'Indicar un nombre.'
+                         ),
+						 'isUnique' => array(
+						 'rule' => 'isUnique',
+						 'message' => 'Este nombre de ciclo esta siendo usado.'
 	                     )
                    ),
                    'fechaInicio' => array(
-                           'date' => array(
-                           'rule' => 'date',
-                           'allowEmpty' => false,
-                           'message' => 'Indicar fecha de inicio del ciclo.'
-                           )
+                         'required' => array(
+						 'rule' => 'notBlank',
+                         'required' => 'create',
+                         'message' => 'Indicar una fecha.'
+	                     )
                    ),
                    'fechaFinal' => array(
-                           'date' => array(
-                           'rule' => 'date',
-                           'allowEmpty' => false,
-                           'message' => 'Indicar fecha de cierre del ciclo.'
-                           )
-                   ),
-                   'primerCuatrimestre' => array(
-                           'date' => array(
-                           'rule' => 'date',
-                           'allowEmpty' => false,
-                           'message' => 'Indicar fecha de comienzo del primer cuatrimestre.'
-                           )
-                   ),
-                   'segundoCuatrimestre' => array(
-                           'date' => array(
-                           'rule' => 'date',
-                           'allowEmpty' => false,
-                           'message' => 'Indicar fecha de comienzo del segundo cuatrimestre.'
-                           )
-                   ),
-                   'observaciones' => array(
-                           'minLength' => array(
-                           'rule' => array('minLength', 4), 
-                           'allowEmpty' => true,       
-                           'message' => 'Indicar una breve observacion del ciclo.'
-                           )
+                         'required' => array(
+						 'rule' => 'notBlank',
+                         'required' => 'create',
+                         'message' => 'Indicar una fecha.'
+	                     )
                    )
-                   
+                   /*
+                   'primer_periodo' => array(
+                         'required' => array(
+						 'rule' => 'notBlank',
+                         'required' => 'create',
+                         'message' => 'Indicar una fecha.'
+	                     )
+                   ),
+                   'segundo_periodo' => array(
+                         'required' => array(
+						 'rule' => 'notBlank',
+                         'required' => 'create',
+                         'message' => 'Indicar una fecha.'
+	                     )
+                   ),
+				   'tercer_periodo' => array(
+                         'required' => array(
+						 'rule' => 'notBlank',
+                         'required' => 'create',
+                         'message' => 'Indicar una fecha.'
+	                     )
+                   ),
+                   */
           );
 }
 ?>

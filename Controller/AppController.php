@@ -16,50 +16,42 @@ class AppController extends Controller {
 	// sessions support
 	// authorization for login and logut redirect
     public $components = array(
-            // 'DebugKit.Toolbar',
+            'DebugKit.Toolbar',
 			'RequestHandler',
 			'Session',
 		    'Auth' => array(
                         'loginRedirect' => array('controller' => 'users', 'action' => 'index'),
-					    'logoutRedirect' => array('controller' => 'users', 'action' => 'login'),                        'authError' => 'Debes estar logueado para continuar.', 
-					    'loginError' => 'Nombre de usuario o contraseña incorrectos.',
+					    'logoutRedirect' => array('controller' => 'users', 'action' => 'login'), 'authError' => 'Debe estar logueado para ver esta página.', 
+					    'loginError' => 'Nombre de usuario o contraseña incorrectos, inténtelo nuevamente.',
 						'authorize' => array('Controller'),
 			));
 
-    // only allow the login controllers only
+    // Allow the login controllers only
 	public function beforeFilter() {
         $this->Auth->allow('login');
 		$this->set('current_user', $this->Auth->user());
 	}
 	
     public function isAuthorized($user) {
-		// Admin puede acceder a todo
+		
+		// Superadmin puede acceder a todo
 		// Si no es así entonces se trata de un usuario común y lo redirigimos a otra página.
 		// En este caso a la acción usuario del controller users
 
-    	
-       		if ($user['status'] == 1 ) { if (isset($user['username']) == "usuario") { $this->redirect('usuario'); } } 
-
-     		else { $this->Auth->logout(); $this->redirect('login'); }
-
-    	return true;
+    	if ($user['status'] == 1 ) { 
+    		
+            if ((isset($user['username']) == "admin") || (isset($user['username']) == "usuario")) { 
+    			$this->redirect('usuario'); 
+    		}
+    	} else { 
+    		$this->Auth->logout(); 
+    		$this->redirect('login'); 
+        }
+	    return true;
 	}
 
 	/**
-	* ejecuta acciones cuando el id se encuentra vacio
-	* @param int $id
-	* @param string $url
-	* @return bool
-	*/
-	function idEmpty($id, $url)
-	{
-		if (empty($id)) {
-			$this->flashWarnings('ID incorrecto',$url);
-		}
-	}
-	
-	/**
-	* Recarga la pÃ¡gina ubicando los valores de la matriz 'params[url]' 
+	* Recarga la página ubicando los valores de la matriz 'params[url]' 
 	* dentro de la matriz 'params[named]'
 	*/
 	function redirectToNamed()
@@ -71,12 +63,49 @@ class AppController extends Controller {
 			$this->redirect($urlArray,null,true);
 		}
 	}
-    
-	function __deleteFile($file)
+	
+	/**
+	* Recarga la página ubicando los valores de la matriz 'params[url]' 
+	* dentro de la matriz 'params[named]'
+	*/
+	function ifActionIs($actions = array())
 	{
-	  if (file_exists($file)) 
+		foreach($actions as $action)
 		{
-			unlink($file);
+		   if($action == $this->params['action'])
+		   {
+			   return true;
+		   }
 		}
+		return false;
+	}
+	
+	/**
+	* Devuelve el Id del último Ciclo cargado.  
+	*/
+	function getLastCicloId()
+	{
+	    $this->loadModel('Ciclo');
+		$MaxCicloId = $this->Ciclo->find('first', array('order'=>'Ciclo.id DESC'));
+	    return $MaxCicloId['Ciclo']['id'];
+	}
+
+    /**
+	* Devuelve el Id del Centro al que pertenece el usuario logueado.  
+	*/
+	function getUserCentroId()
+	{
+	    $centroId = $this->Auth->user('centro_id');
+	    return $centroId;
+	}	
+
+	/**
+	* Devuelve los alumnos inscriptos en el ciclo actual.  
+	*/
+	function getLastCicloInscripcionAlumnoId($cicloIdActual)
+	{
+	    $this->loadModel('Inscripcion');
+		$CicloInscripcionAlumnoId = $this->Inscripcion->find('list', array('fields'=>array('Inscripcion.alumno_id'), 'conditions'=>array('Inscripcion.ciclo_id'=>$cicloIdActual)));
+	    return $CicloInscripcionAlumnoId;
 	}
 }

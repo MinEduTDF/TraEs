@@ -2,15 +2,27 @@
 class MateriasController extends AppController {
 
 	var $name = 'Materias';
-    var $helpers = array('Session');
+    public $helpers = array('Session');
 	public $components = array('Auth','Session', 'RequestHandler');
-	var $paginate = array('Materia' => array('limit' => 6, 'order' => 'Materia.alia DESC'));
+	public $paginate = array('Materia' => array('limit' => 6, 'order' => 'Materia.alia DESC'));
 
-	
-	function index() {
-		//$this->Materia->recursive = 0;
-		$this->set('materias', $this->paginate());
-        $cursos = $this->Materia->Curso->find('list', array('fields'=>array('id', 'nombre_completo_curso')));
+    public function sanitize($string, $force_lowercase = true, $anal = false) {
+    $strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]","}", "\\", "|", ";", ":", "\"", "'", "&#8216;", "&#8217;", "&#8220;", "&#8221;", "&#8211;", "&#8212;","â€", "â€", ",", "<",">", "/", "?");
+    $clean = trim(str_replace($strip, "", strip_tags($string)));
+    $clean = preg_replace('/\s+/', "-", $clean);
+    $clean = ($anal) ? preg_replace("/[^a-zA-Z0-9]/", "", $clean) : $clean ;
+    return ($force_lowercase) ?
+        (function_exists('mb_strtolower')) ?
+            mb_strtolower($clean, 'UTF-8') :
+            strtolower($clean) :
+        $clean;
+    }
+
+	public function index() {
+		$this->Materia->recursive = 1;
+		
+		$this->paginate['Materia']['limit'] = 6;
+		$this->paginate['Materia']['order'] = $this->Materia->Curso->find('list', array('fields'=>array('id', 'nombre_completo_curso'), 'order'=>'Curso.anio ASC'));
 		$this->redirectToNamed();
 		$conditions = array();
 		
@@ -19,67 +31,69 @@ class MateriasController extends AppController {
 			$conditions['Materia.alia ='] = $this->params['named']['alia'];
 		}
 
-		if(!empty($this->params['named']['curso_id']))
-		{
-			$conditions['Materia.curso_id ='] = $this->params['named']['curso_id'];
-		}
-		
-		if(!empty($this->params['named']['dictado']))
-		{
-			$conditions['Materia.dictado ='] = $this->params['named']['dictado'];
-		}
-		
 		$materias = $this->paginate('Materia', $conditions);
 		$this->set(compact('materias', 'cursos'));
 	}
 
-	function view($id = null) {
+	public function view($id = null) {
 		if (!$id) {
 			$this->Session->setFlash(__('Materia no valida.'));
 			$this->redirect(array('action' => 'index'));
 		}
 		$this->set('materia', $this->Materia->read(null, $id));
+
+		//Genera nombres en los datos relacionados.
+		$horarioCicloId = $this->Materia->Horario->find('list', array('fields'=>array('ciclo_id')));
+		$this->loadModel('Ciclo');
+		$cicloNombre = $this->Ciclo->find('list', array('fields'=>array('nombre'), 'conditions'=>array('id'=>$horarioCicloId)));
+		$horarioMateriaId = $this->Materia->Horario->find('list', array('fields'=>array('materia_id')));
+		$this->loadModel('Materia');
+		$materiaAlia = $this->Materia->find('list', array('fields'=>array('alia'), 'conditions'=>array('id'=>$horarioMateriaId)));
+		$inscripcionAlumnoId = $this->Materia->Inscripcion->find('list', array('fields'=>array('alumno_id')));
+		$this->loadModel('Alumno');
+		$alumnoNombre = $this->Alumno->find('list', array('fields'=>array('nombre_completo_alumno'), 'conditions'=>array('id'=>$inscripcionAlumnoId)));
+		$this->set(compact('cicloNombre', 'materiaAlia', 'alumnoNombre'));
 	}
 
-	function add() {
-		  //abort if cancel button was pressed  
-          if(isset($this->params['data']['cancel'])){
-                $this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
-                $this->redirect( array( 'action' => 'index' ));
-		  }
-  		  if (!empty($this->data)) {
-			$this->Materia->create();
-			if ($this->Materia->save($this->data)) {
-				$this->Session->setFlash('La materia ha sido grabada.', 'default', array('class' => 'alert alert-success'));
-				//$this->redirect(array('action' => 'index'));
-				$inserted_id = $this->Materia->id;
-    			$this->redirect(array('action' => 'view', $inserted_id));
-			} else {
-				$this->Session->setFlash('La materia no fué grabada. Intente nuevamente.', 'default', array('class' => 'alert alert-danger'));
-			}
-		}
-		$cursos = $this->Materia->Curso->find('list', array('fields'=>array('id','nombre_completo_curso')));
-		$this->set(compact('cursos', 'alumnos'));
-	}
-
-	function edit($id = null) {
+	
+	public function add() {
+        if ($this->request->is('post')) {
+            $this->Materia->create();
+            if(empty($this->data['Materia']['contenido']['name'])){
+               unset($this->request->data['Materia']['contenido']);
+            }
+	        if(!empty($this->data['Materia']['contenido']['name'])){
+			   $file=$this->data['Materia']['contenido'];
+			   $file['name']=$this->sanitize($file['name']);
+			   $this->request->data['Materia']['contenido'] = time().$file['name'];
+			   if($this->Materia->save($this->request->data)) {
+				  move_uploaded_file($file['tmp_name'], APP . 'webroot/files/materias/' .DS. time().$file['name']);  
+				  $this->Session->setFlash(__('Los Contenidos se guardaron.'));
+				  return $this->redirect(array('action' => 'index'));
+		       }
+	        }
+           $this->Session->setFlash(__('Los Contenidos no se guardaron.'));
+        }
+        $cursos = $this->Materia->Curso->find('list', array('fields'=>array('id','nombre_completo_curso')));
+        $this->set(compact('cursos'));
+    }
+	
+	public function edit($id = null) {
 		if (!$id && empty($this->data)) {
 			$this->Session->setFlash('Materia no valida.', 'default', array('class' => 'alert alert-warning'));
-                //$this->redirect(array('action' => 'index'));
-				$inserted_id = $this->Materia->id;
-    			$this->redirect(array('action' => 'view', $inserted_id));
+			$this->redirect(array('action' => 'index'));
 		}
 		if (!empty($this->data)) {
 		  //abort if cancel button was pressed  
-            if(isset($this->params['data']['cancel'])){
+          if(isset($this->params['data']['cancel'])){
                 $this->Session->setFlash('Los cambios no fueron guardados. Edición cancelada.', 'default', array('class' => 'alert alert-warning'));
                 $this->redirect( array( 'action' => 'index' ));
 		  }
-			if ($this->Materia->save($this->data)) {
+		  if ($this->Materia->save($this->data)) {
 				$this->Session->setFlash('La materia ha sido grabada.', 'default', array('class' => 'alert alert-success'));
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash('La materia no fue grabada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
+				$this->Session->setFlash('La materia no ha sido grabada. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
 		if (empty($this->data)) {
@@ -88,8 +102,9 @@ class MateriasController extends AppController {
 		$cursos = $this->Materia->Curso->find('list', array('fields'=>array('id','nombre_completo_curso')));
 		$this->set(compact('cursos', 'alumnos'));
 	}
+   
 
-	function delete($id = null) {
+	public function delete($id = null) {
 		if (!$id) {
 			$this->Session->setFlash('Id no valido para materia.', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action'=>'index'));

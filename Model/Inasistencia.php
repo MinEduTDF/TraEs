@@ -20,14 +20,21 @@ class Inasistencia extends AppModel {
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
+		),
+		'Empleado' => array(
+			'className' => 'Empleado',
+			'foreignKey' => 'empleado_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
 		)
 	);
 	var $hasAndBelongsToMany = array(
-		'Materia' => array(
-			'className' => 'Materia',
-			'joinTable' => 'inasistencias_materias',
+		'Curso' => array(
+			'className' => 'Curso',
+			'joinTable' => 'cursos_inasistencias',
 			'foreignKey' => 'inasistencia_id',
-			'associationForeignKey' => 'materia_id',
+			'associationForeignKey' => 'curso_id',
 			'unique' => true,
 			'conditions' => '',
 			'fields' => '',
@@ -38,11 +45,11 @@ class Inasistencia extends AppModel {
 			'deleteQuery' => '',
 			'insertQuery' => ''
 		),
-		'Curso' => array(
-			'className' => 'Curso',
-			'joinTable' => 'cursos_inasistencias',
+		'Materia' => array(
+			'className' => 'Materia',
+			'joinTable' => 'inasistencias_materias',
 			'foreignKey' => 'inasistencia_id',
-			'associationForeignKey' => 'curso_id',
+			'associationForeignKey' => 'materia_id',
 			'unique' => true,
 			'conditions' => '',
 			'fields' => '',
@@ -59,35 +66,71 @@ class Inasistencia extends AppModel {
   //Validaciones
 
         var $validate = array(
-                   'tipo' => array(
-                           'minLength' => array(
-                           'rule' => array('minLength',4),                          
-                           'allowEmpty' => false,
-                           'message' => 'El tipo de inasistencia no es valida. Indicar una de las opciones.'
+                   'created' => array(
+                           'required' => array(
+						   'rule' => 'notBlank',
+                           'required' => 'create',
+						   'message' => 'Indicar una fecha y hora.'
+                           )
+                   ),
+				   'ciclo_id' => array(
+                           'required' => array(
+						   'rule' => 'notBlank',
+                           'required' => 'create',
+                           'message' => 'Indicar un ciclo.'
+                           )
+                   ),
+				   'Curso' => array(
+                           'required' => array(
+						   'rule' => 'notBlank',
+                           'required' => 'create',
+                           'message' => 'Indicar un curso.'
+                           )
+                   ),
+				   'alumno_id' => array(
+                           'required' => array(
+						   'rule' => 'notBlank',
+                           'required' => 'create',
+                           'message' => 'Indicar un alumno.'
+                           )
+                   ),
+				   'Materia' => array(
+                           'required' => array(
+						   'rule' => 'notBlank',
+                           'required' => 'create',
+                           'message' => 'Indicar una materia.'
+                           )
+                   ),
+				   'tipo' => array(
+                           'required' => array(
+						   'rule' => 'notBlank',
+                           'required' => 'create',
+                           'message' => 'Indicar una de las opciones.'
                            )
                    ),
 				   'justificado' => array(
-                           'maxLength' => array(
-                           'rule' => array('maxLength',10),
-                           'allowEmpty' => false,
-                           'message' => 'El tipo de justificación no es valida. Indicar una de las opciones.'
+                           'required' => array(
+						   'rule' => 'notBlank',
+                           'required' => 'create',
+                           'message' => 'Indicar una de las opciones.'
                            )
                    ),
                    'causa' => array(
-                           'minLength' => array(
-                           'rule' => array('minLength',4),                          
-                           'allowEmpty' => false,
+                           'required' => array(
+						   'rule' => 'notBlank',
+                           'required' => 'create',
                            'message' => 'En caso de que se haya justificado, indicar la causa.'
                            )
                    ),
-				   'creado' => array(
-                           'date' => array(
-                           'rule' => 'date',                          
-                           'allowEmpty' => false,
-                           'message' => 'La fecha no es valida. Indicar una fecha de creación del registro valida.'
-                           )
+                   'rule1' => array(
+				           'rule'    => array(
+				           'extension',array('pdf')),
+				           'message' => 'Please upload pdf file only'
+				   ),
+                   'rule2' => array(
+                           'rule' => array('fileSize', '<=', '1MB'),
+                           'message' => 'File must be less than 1MB'
                    )
 		);
-
 }
 ?>

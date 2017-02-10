@@ -2,10 +2,10 @@
 <div class="TituloSec"><?php echo __('Agregar Curso'); ?></div>
 <div id="ContenidoSec">
 <div class="cursos form">
-<?php echo $this->Form->create('Curso');?>
+<?php echo $this->Form->create('Curso', array('novalidate' => true));?>
 
 	         <div class="unit">
-               <?php echo $this->element('form_curso'); ?><p>
+               <?php echo $this->element('forms/form_curso'); ?><p>
              </div>
              <div class="text-center">
               <div class="submit">                 
