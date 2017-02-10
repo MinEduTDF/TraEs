@@ -1,4 +1,4 @@
-<?php echo $this->Form->create('Centro',array('type'=>'get','action'=>'index'));?>
+<?php echo $this->Form->create('Centro',array('type'=>'get','url'=>'index'));?>
 <div class="form-group">
    <?php echo $this->Form->input('cue', array('label' => false, 'class' => 'form-control', 'Placeholder' => 'Ingrese Nº de CUE...'));	?>
 </div>

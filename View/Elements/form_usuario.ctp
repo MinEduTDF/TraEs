@@ -8,7 +8,7 @@
 			<div class="animated fadeIn">
 				<span  class="img_login glyphicon glyphicon-user"></span>
 			</div>
-			<?php echo $this->Form->create('User', array('action'=> 'login'));?>
+			<?php echo $this->Form->create('User', array('url'=> 'login'));?>
 		 	<div id="resultado"></div>
 	            <div class="form-inline">
 	                <?php echo $this->Form->input('username', 

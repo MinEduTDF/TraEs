@@ -1,4 +1,4 @@
-<?php echo $this->Form->create('CursosInscripcion',array('type'=>'get','action'=>'index', 'novalidate' => true));?>
+<?php echo $this->Form->create('CursosInscripcion',array('type'=>'get','url'=>'index', 'novalidate' => true));?>
 <div class="form-group">
    <?php echo $this->Form->input('curso_id', array('label' => false, 'empty' => 'Ingrese una sección...', 'class' => 'form-control'));	?>
 </div>
