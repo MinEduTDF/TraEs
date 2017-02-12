@@ -1,8 +1,8 @@
 # TRAES con CakePHP 2.X
 
-/app/Plugin/CakePdf/*
-/app/Plugin/DebugKit/*
-/app/Plugin/Upload/*
+/Plugin/CakePdf/*
+/Plugin/DebugKit/*
+/Plugin/Upload/*
 
 /Vendor/*
 
