@@ -25,7 +25,7 @@ class AlumnosController extends AppController {
 		$this->paginate['Alumno']['order'] = array('Alumno.id' => 'ASC');
 		$userCentroId = $this->getUserCentroId();
 		if($this->Auth->user('role') === 'admin') {
-		$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $userCentroId);
+		$this->paginate['Alumno']['conditions'] = array('Alumno.centro_id' => $userCentroId);
 		}
 
 		$estadoInscripcion = $this->Alumno->Inscripcion->find('list', array('fields'=>array('estado')));
