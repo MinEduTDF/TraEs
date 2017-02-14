@@ -29,8 +29,11 @@ class InscripcionsController extends AppController {
 		$this->paginate['Inscripcion']['limit'] = 4;
 		$this->paginate['Inscripcion']['order'] = array('Inscripcion.fecha_alta' => 'DESC');
 		$cicloIdActual = $this->getLastCicloId();
-		$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual);
-		
+		$userCentroId = $this->getUserCentroId();
+		if($this->Auth->user('role') === 'admin') {
+		$this->paginate['Inscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.centro_id' => $userCentroId);
+		}
+        
 		$alumnos = $this->Inscripcion->Alumno->find('list', array('fields'=>array('id', 'nombre_completo_alumno')));
 		
 		$this->redirectToNamed();

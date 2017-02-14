@@ -23,7 +23,7 @@ class CursosController extends AppController {
 		$this->Curso->recursive = 1;
 		$this->paginate['Curso']['limit'] = 4;
 		$this->paginate['Curso']['order'] = array('Curso.anio' => 'ASC');
-		$usercentroId = $this->getUserCentroId();
+		$userCentroId = $this->getUserCentroId();
 		if($this->Auth->user('role') === 'admin') {
 		$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $userCentroId);
 		}

@@ -1,8 +1,10 @@
 <?php echo $this->Form->create('Curso',array('type'=>'get','url'=>'index', 'novalidate' => true));?>
 <div class="form-group">
-	<?php
-        echo $this->Form->input('centro_id', array('label' =>false, 'empty' => 'Ingrese un centro...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Selecciones una opción de la lista'));
+	<?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')): ?>
+    <?php
+        echo $this->Form->input('centro_id', array('label' =>false, 'empty' => 'Ingrese una institución...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Selecciones una opción de la lista'));
     ?><br>
+<?php endif; ?>
     <?php
         $anios = array(
             '1ro' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');
