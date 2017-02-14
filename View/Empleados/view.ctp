@@ -343,11 +343,12 @@
 	<?php if (!empty($empleado['User'])):?>
   			<div class="col-xs-12 col-sm-6 col-md-8">
 	<?php foreach ($empleado['User'] as $user): ?>
-	<div class="col-md-6">
+	<div class="col-md-4">
 		<div class="unit">
 			<?php echo '<b>Nombre de Usuario:</b> '.$this->Html->link($user['username'], array('controller' => 'users', 'action' => 'view', $user['id']));?><br>
 			<?php echo '<b>Puesto:</b> '.$user['puesto'];?><br>
             <!--<?php echo '<b>Centro:</b> '.$user['centro_id'];?><br>-->
+            <hr>
             <div class="text-right">
             <?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-edit"></i>'), array('controller' => 'users', 'action' => 'edit', $user['id']), array('class' => 'btn btn-warning', 'escape' => false)); ?>
 			<?php echo $this->Html->link(__('<i class= "glyphicon glyphicon-eye-open"></i>'), array('controller' => 'users', 'action' => 'view', $user['id']), array('class' => 'btn btn-success','escape' => false)); ?>

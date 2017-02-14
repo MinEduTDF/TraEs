@@ -1,11 +1,17 @@
 <?php echo $this->Form->create('Curso',array('type'=>'get','url'=>'index', 'novalidate' => true));?>
 <div class="form-group">
 	<?php
-        $anios = array('1ero' => '1ero', '2do' => '2do', '3ero' => '3ero');
+        echo $this->Form->input('centro_id', array('label' =>false, 'empty' => 'Ingrese un centro...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Selecciones una opción de la lista'));
+    ?><br>
+    <?php
+        $anios = array(
+            '1ro' => '1ro', '2do' => '2do', '3ro' => '3ro', '4to' => '4to', '5to' => '5to', '6to' => '6to', '7mo' => '7mo');
         echo $this->Form->input('anio', array('label' =>false, 'empty' => 'Ingrese un año...', 'options' => $anios, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Selecciones una opción de la lista'));
     ?><br>
     <?php
-		$divisiones = array('ROJA' => 'ROJA', 'CELESTE' => 'CELESTE', 'AMARILLA' => 'AMARILLA', 'VERDE' => 'VERDE');
+		$divisiones = array(
+            'Inicial' => array('ROJA' => 'ROJA', 'CELESTE' => 'CELESTE', 'AMARILLA' => 'AMARILLA', 'VERDE' => 'VERDE', 'NARANJA' => 'NARANJA'),
+            'Primaria' => array('A' => 'A', 'B' => 'B', 'C' => 'C', 'D' => 'D'),);
 		echo $this->Form->input('division', array('label' => false, 'empty' => 'Ingrese una división...', 'options' => $divisiones, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción de la lista'));
     ?><br>
 </div>

@@ -105,10 +105,11 @@
 			<?php if (!empty($alumno['Inscripcion'])):?>
   			<div class="col-xs-12 col-sm-6 col-md-8">
 	<?php foreach ($alumno['Inscripcion'] as $inscripcion):	?>
-	<div class="col-md-6">
+	<div class="col-md-4">
 		<div class="unit">
 			<!--<?php echo '<b>Ciclo id:</b> '.($this->Html->link($inscripcion['ciclo_id'], array('controller' => 'ciclos', 'action' => 'view', $inscripcion['ciclo_id'])));?><br>-->
-				<?php echo '<b>Tipo de alta:</b> '.$inscripcion['tipo_alta'];?><br>
+			<?php echo '<b>Código:</b> '.$inscripcion['legajo_nro'];?><br>
+			<!--<?php echo '<b>Tipo de alta:</b> '.$inscripcion['tipo_alta'];?><br>-->
 			<?php echo '<b>Fecha de alta:</b> '.$this->Html->formatTime($inscripcion['fecha_alta']);?><br>
 			<!--<?php echo '<b>Cursa:</b> '.$inscripcion['cursa'];?><br>
             <?php echo '<b>Fecha de baja:</b> '.$this->Html->formatTime($inscripcion['fecha_baja']);?><br>
@@ -116,6 +117,7 @@
             <?php echo '<b>Fecha de egreso:</b> '.$this->Html->formatTime($inscripcion['fecha_egreso']);?><br>
             <!--<?php echo '<b>Nota:</b> '.$inscripcion['nota'];?><br>-->
             <b>Estado:</b> <?php if($inscripcion['estado'] == "COMPLETA"){; ?><span class="label label-success"><?php echo $inscripcion['estado']; ?></span><?php } else{; ?><span class="label label-danger"><?php echo $inscripcion['estado']; ?></span><?php } ?></br>
+            <hr>
             <div class="text-right">
             <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'inscripcions', 'action' => 'view', $inscripcion['id']), array('class' => 'btn btn-success','escape' => false)); ?>
             <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>

@@ -1,7 +1,7 @@
 <?php echo $this->Html->script(array('acordeon', 'slider')); ?>
 <?php echo $this->Html->css('slider'); ?>
 <!-- start main -->
-<div class="TituloSec">Legajo Nro: <?php echo ($inscripcion['Inscripcion']['legajo_nro']); ?></div>
+<div class="TituloSec">Inscripción: <?php echo ($inscripcion['Inscripcion']['legajo_nro']); ?></div>
 <div id="ContenidoSec">
     <div class="row">
         <div class="col-md-8">	
@@ -132,7 +132,7 @@
 	        <?php if (!empty($inscripcion['Curso'])):?>
   			<div class="col-xs-12 col-sm-6 col-md-8">
 	            <?php foreach ($inscripcion['Curso'] as $curso): ?>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="unit">
                         <?php echo '<b>Año:</b> '.$curso['anio'];?><br>
                         <?php echo '<b>División:</b> '.$curso['division'];?><br>
@@ -140,11 +140,12 @@
                         <?php echo '<b>Tipo:</b> '.$curso['tipo'];?><br>
                         <!--<?php echo '<b>Cursada:</b> '.$curso['organizacion_cursada'];?><br>
                         <?php echo '<b>Titulación:</b> '.($this->Html->link($curso['titulacion_id'], array('controller' => 'titulacions', 'action' => 'view', $curso['titulacion_id'])));?><br>-->
+                        <hr>
                         <div class="text-right">
                             <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-eye-open"></i>'), array('controller' => 'cursos', 'action' => 'view', $curso['id']), array('class' => 'btn btn-success','escape' => false)); ?>
                           <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'admin')): ?>
-                            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'cursos', 'action' => 'edit', $curso['id']), array('class' => 'btn btn-danger','escape'  => false)); ?>
-                            <?php echo $this->Html->link(__('Borrar'), array('controller' => 'materias', 'action' => 'delete', $materia['id']), null, sprintf(__('Are you sure you want to delete # %s?'), $materia['id'])); ?>
+                            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-edit"></i>'), array('controller' => 'cursos', 'action' => 'edit', $curso['id']), array('class' => 'btn btn-warning','escape'  => false)); ?>
+                            <?php echo $this->Html->link(__('<i class="glyphicon glyphicon-trash"></i>'), array('controller' => 'cursos', 'action' => 'delete', $curso['id']), array('class' => 'btn btn-danger','escape' => false)); ?>
                           <?php endif; ?>  
                         </div>
                     </div>

@@ -58,8 +58,9 @@
  * Leaving this constant undefined will result in it being defined in Cake/bootstrap.php
  */
 	//define('CAKE_CORE_INCLUDE_PATH', 'C:' . DS . 'xampp' . DS . 'htdocs' . DS . 'minedutdf' . DS . 'traes-ip' . DS . 'Vendor' . DS . 'cakephp' . DS . 'cakephp' . DS . 'lib');
-    define('CAKE_CORE_INCLUDE_PATH', 'home' . DS . 'u563169802' . DS . 'public_html' . DS . 'Vendor' . DS . 'cakephp' . DS . 'cakephp' . DS . 'lib');
-    
+    //define('CAKE_CORE_INCLUDE_PATH', 'public_html' . DS . 'Vendor' . DS . 'cakephp' . DS . 'cakephp' . DS . 'lib');
+    define('CAKE_CORE_INCLUDE_PATH', ROOT . DS . APP_DIR . DS . 'Vendor' . DS . 'cakephp' . DS . 'cakephp' . DS . 'lib');
+
 /**
  * Editing below this line should NOT be necessary.
  * Change at your own risk.

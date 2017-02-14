@@ -23,12 +23,17 @@ class CursosController extends AppController {
 		$this->Curso->recursive = 1;
 		$this->paginate['Curso']['limit'] = 4;
 		$this->paginate['Curso']['order'] = array('Curso.anio' => 'ASC');
-		$centroId = $this->getUserCentroId();
-		$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $centroId);
-		
+		$usercentroId = $this->getUserCentroId();
+		if($this->Auth->user('role') === 'admin') {
+		$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $userCentroId);
+		}
 		$this->redirectToNamed();
 		$conditions = array();
 		
+		if(!empty($this->params['named']['centro_id']))
+		{
+			$conditions['Curso.centro_id ='] = $this->params['named']['centro_id'];
+		}
 		if(!empty($this->params['named']['anio']))
 		{
 			$conditions['Curso.anio ='] = $this->params['named']['anio'];
@@ -42,7 +47,8 @@ class CursosController extends AppController {
 			$conditions['Curso.turno ='] = $this->params['named']['turno'];
 		}
 		$cursos = $this->paginate('Curso',$conditions);
-		$this->set(compact('cursos'));
+		$centros = $this->Curso->Centro->find('list', array('fields'=>array('sigla')));
+		$this->set(compact('cursos', 'centros'));
 	}
 
 	function view($id = null) {
