@@ -35,10 +35,15 @@ class InscripcionsController extends AppController {
 		}
         
 		$alumnos = $this->Inscripcion->Alumno->find('list', array('fields'=>array('id', 'nombre_completo_alumno')));
+		$centros = $this->Inscripcion->Centro->find('list', array('fields'=>array('id', 'sigla')));
 		
 		$this->redirectToNamed();
 		$conditions = array();
 		
+		if(!empty($this->params['named']['centro_id']))
+		{
+			$conditions['Inscripcion.centro_id ='] = $this->params['named']['centro_id'];
+		}
 		if(!empty($this->params['named']['legajo_nro']))
 		{
 			$conditions['Inscripcion.legajo_nro ='] = $this->params['named']['legajo_nro'];
@@ -48,7 +53,7 @@ class InscripcionsController extends AppController {
 			$conditions['Inscripcion.alumno_id ='] = $this->params['named']['alumno_id'];
 		}
 		$inscripcions = $this->paginate('Inscripcion',$conditions);
-		$this->set(compact('inscripcions', 'alumnos'));
+		$this->set(compact('inscripcions', 'alumnos', 'centros'));
 	}
 
 	public function view($id = null) {

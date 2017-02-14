@@ -23,11 +23,21 @@ class AlumnosController extends AppController {
 		$this->Alumno->recursive = 0;
 		$this->paginate['Alumno']['limit'] = 4;
 		$this->paginate['Alumno']['order'] = array('Alumno.id' => 'ASC');
-		$this->paginate['Alumno']['conditions'] = array('Alumno.user_id' => $this->Auth->user('id'));
-		
+		$userCentroId = $this->getUserCentroId();
+		if($this->Auth->user('role') === 'admin') {
+		$this->paginate['Curso']['conditions'] = array('Curso.centro_id' => $userCentroId);
+		}
+
 		$estadoInscripcion = $this->Alumno->Inscripcion->find('list', array('fields'=>array('estado')));
+		$this->loadModel('Centro');
+		$centrosId = $this->Alumno->find('list', array('fields'=>array('centro_id')));
+        $centros = $this->Centro->find('list', array('fields'=>array('sigla'), 'conditions' => array('id' => $centrosId)));
+
 		$this->redirectToNamed();
 		$conditions = array();
+        if(!empty($this->params['named']['centro_id'])){
+			$conditions['Alumno.centro_id ='] = $this->params['named']['centro_id'];
+		}
         if(!empty($this->params['named']['nombre_completo_alumno'])){
 			$conditions['Alumno.nombre_completo_alumno ='] = $this->params['named']['nombre_completo_alumno'];
 		}
@@ -41,7 +51,7 @@ class AlumnosController extends AppController {
 			$foto = 1;
 		}
 		$alumnos = $this->paginate('Alumno', $conditions);
-		$this->set(compact('alumnos', 'estadoInscripcion', 'foto'));
+		$this->set(compact('alumnos', 'estadoInscripcion', 'foto', 'centros'));
 	}
 
 	public function view($id = null) {
@@ -93,7 +103,9 @@ class AlumnosController extends AppController {
 			$year = $this->request->data['Alumno']['fecha_nac']['year'];
 			// Calcula la edad y se deja en los datos que se intentaran guardar
 			$this->request->data['Alumno']['edad'] = $this->__getEdad($day, $month, $year);
-			
+			// Obtiene y asigna el centro al alumno
+			$this->request->data['Alumno']['centro_id'] = $this->getUserCentroId();
+
 			if ($this->Alumno->save($this->request->data)) {
 				$this->Session->setFlash('El alumno ha sido grabado', 'default', array('class' => 'alert alert-success'));
 				$inserted_id = $this->Alumno->id;
@@ -128,7 +140,7 @@ class AlumnosController extends AppController {
 		  $year = $this->request->data['Alumno']['fecha_nac']['year'];
 		  // Calcula la edad y se deja en los datos que se intentaran guardar
 		  $this->request->data['Alumno']['edad'] = $this->__getEdad($day, $month, $year);
-		  
+          
 		  if ($this->Alumno->save($this->data)) {
 				$this->Session->setFlash('El alumno ha sido grabado', 'default', array('class' => 'alert alert-success'));
 				$inserted_id = $this->Alumno->id;

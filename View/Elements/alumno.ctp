@@ -16,6 +16,7 @@
                          <span class="error"></span><?php echo $this->Html->image('../files/alumno/foto/' . $alumno['Alumno']['foto_dir'] . '/' . 'thumb_' .$alumno['Alumno']['foto'], array('class' => 'img-responsive img-rounded img-thumbnail')); ?>
                 <?php endif; ?>
     </div>
+    <span class="name"><span class="glyphicon glyphicon-info-sign"></span> <b>Institución:</b> <?php echo $this->Html->link(($centros[$alumno['Alumno']['centro_id']]), array('controller' => 'centros', 'action' => 'view', $alumno['Alumno']['centro_id']));?></span><br/>
     <span class="name"><span class="glyphicon glyphicon-file"></span> <?php echo ($alumno['Alumno']['documento_tipo']).'  '.($alumno['Alumno']['documento_nro']); ?></span><br/>
     <span class="name"><span class="glyphicon glyphicon-user"></span> <?php echo $alumno['Alumno']['nombre_completo_alumno']; ?></span></br>
     <span class="text"><span class="glyphicon glyphicon-earphone"></span> <?php echo $alumno['Alumno']['telefono_nro']; ?></span><br/>
