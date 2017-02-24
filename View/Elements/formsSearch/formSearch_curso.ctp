@@ -2,6 +2,10 @@
 <div class="form-group">
 	<?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')): ?>
     <?php
+        $niveles = array('NINGUNO' => 'NINGUNO', 'INICIAL' => 'INICIAL', 'PRIMARIA' => 'PRIMARIA');
+        echo $this->Form->input('nivel', array('label' => false, 'empty' => 'Ingrese un nivel...', 'options' => $niveles, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Selecciones una opción de la lista'));
+    ?><br>
+    <?php
         echo $this->Form->input('centro_id', array('label' =>false, 'empty' => 'Ingrese una institución...', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Selecciones una opción de la lista'));
     ?><br>
 <?php endif; ?>

@@ -4,7 +4,7 @@
 <div class="row">
 	<div class="col-xs-12 col-md-6 col-centered">
 		<div id="login" class="animated bounceInDown">
-			<div class="titulo">TraEs | Niveles Inicial/Primario</div><br>
+			<div class="titulo">SIEP | Niveles Inicial/Primario</div><br>
 			<div class="animated fadeIn">
 				<span  class="img_login glyphicon glyphicon-user"></span>
 			</div>

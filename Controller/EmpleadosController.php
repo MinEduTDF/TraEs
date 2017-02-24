@@ -43,7 +43,7 @@ class EmpleadosController extends AppController {
         		
     function view($id = null) {
 		if (!$id) {
-			$this->Session->setFlash('Empleado no valido.', 'default', array('class' => 'alert alert-danger'));
+			$this->Session->setFlash('Agente no valido.', 'default', array('class' => 'alert alert-danger'));
 			$this->redirect(array('action' => 'index'));
 		}
 		//Evalúa si existe foto.
@@ -73,11 +73,14 @@ class EmpleadosController extends AppController {
 			$this->request->data['Empleado']['nombres'] = $nombresMayuscula;
 
 			if ($this->Empleado->save($this->data)) {
-				$this->Session->setFlash('El empleado ha sido grabado.', 'default', array('class' => 'alert alert-success'));
-				$inserted_id = $this->Inscripcion->id;
-					$this->redirect(array('action' => 'view', $inserted_id));
+				$this->Session->setFlash('El agente ha sido grabado.', 'default', array('class' => 'alert alert-success'));
+				$this->redirect(array('action' => 'index'));
+				/*
+				$inserted_id = $this->Usuario->id;
+				$this->redirect(array('action' => 'view', $inserted_id));
+				*/
 			} else {
-				$this->Session->setFlash('El empleado no fué grabado. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
+				$this->Session->setFlash('El agente no fué grabado. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
 		$cargos = $this->Empleado->Cargo->find('list');
@@ -87,7 +90,7 @@ class EmpleadosController extends AppController {
 
 	function edit($id = null) {
 		if (!$id && empty($this->data)) {
-			$this->Session->setFlash('Empleado no valido.', 'default', array('class' => 'alert alert-warning'));
+			$this->Session->setFlash('Agente no valido.', 'default', array('class' => 'alert alert-warning'));
 			$this->redirect(array('action' => 'index'));
 		}
 		if (!empty($this->data)) {
@@ -105,10 +108,14 @@ class EmpleadosController extends AppController {
 		  $this->request->data['Empleado']['nombres'] = $nombresMayuscula; 
          
 		  if ($this->Empleado->save($this->data)) {
-				$this->Session->setFlash('El empleado ha sido grabado.', 'default', array('class' => 'alert alert-success'));
+				$this->Session->setFlash('El agente ha sido grabado', 'default', array('class' => 'alert alert-success'));
 				$this->redirect(array('action' => 'index'));
+				/*
+				$inserted_id = $this->Usuario->id;
+				$this->redirect(array('action' => 'view', $inserted_id));
+				*/
 			} else {
-				$this->Session->setFlash('El empleado no ha sido grabado. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
+				$this->Session->setFlash('El agente no ha sido grabado. Intentelo nuevamente.', 'default', array('class' => 'alert alert-danger'));
 			}
 		}
 		if (empty($this->data)) {
@@ -125,10 +132,10 @@ class EmpleadosController extends AppController {
 			$this->redirect(array('action'=>'index'));
 		}
 		if ($this->Empleado->delete($id)) {
-			$this->Session->setFlash('El Empleado ha sido borrado.', 'default', array('class' => 'alert alert-success'));
+			$this->Session->setFlash('El agente ha sido borrado.', 'default', array('class' => 'alert alert-success'));
 			$this->redirect(array('action'=>'index'));
 		}
-		$this->Session->setFlash('El Empleado no fue borrado.', 'default', array('class' => 'alert alert-danger'));
+		$this->Session->setFlash('El agente no fue borrado.', 'default', array('class' => 'alert alert-danger'));
 		$this->redirect(array('action' => 'index'));
 	}
 }

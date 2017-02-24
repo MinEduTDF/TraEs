@@ -1,7 +1,7 @@
 <!-- app/View/Users/usuario.ctp -->
 <div class="users form">
 <!-- start main -->
-<div class="TituloSec">Bienvenido a TraEs</div>
+<div class="TituloSec">Bienvenido a SIEP</div>
 <div id="ContenidoSec">
     <!--<h1 style="font-weight: bold; color: red; text-decoration: underline;"> Página de usuario común</h1>-->
 <!--<h1>Usuarios:</h1>
@@ -42,8 +42,17 @@
 </div>				
 <br/>-->
 <?php //echo $this->Html->link( "Logout",   array('action'=>'logout') ); ?>
-<blockquote>
-  <p>Si buscas resultados distintos, no hagas siempre lo mismo.</p>
-  <footer>Frase célebre de<cite title="Source Title">Albert Einstein</cite></footer>
-</blockquote>
+	<blockquote>
+	  <h3>Breve instructivo para cargar datos institucionales en SIEP.</h3>
+	  <hr>
+	  <h4>1° PASO: Carga de las Secciones/Cursos</h4><br>
+	  <p>Desde el menú: "CARGA --> SECCIONES" crear los cursos/secciones mediante el botón "AGREGAR".</p><br>
+	  <h4>2° PASO: Pre-Inscripción de los Alumnos</h4><br>
+	  <p>Desde el menú: "CARGA --> ALUMNOS" cargar los datos personales de los potenciales alumnos mediante el botón "AGREGAR".</p><br>
+	  <h4>3° PASO: Inscripción de los Alumnos</h4><br>
+	  <p>Desde el menú: "CARGA --> INSCRIPCIONES" vincular a los alumnos pre-inscriptos a los cursos y/o materias que cursarán, mediante el botón "AGREGAR".</p><br>
+	  <hr>	
+	  <p>Si buscas resultados distintos, no hagas siempre lo mismo.</p>
+	  <footer>Frase célebre de<cite title="Source Title">Albert Einstein</cite></footer>
+	</blockquote>
 </div>

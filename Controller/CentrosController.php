@@ -6,7 +6,7 @@ class CentrosController extends AppController {
 
 	var $name = 'Centros';
     public $helpers = array('Form', 'Time', 'Js', 'TinyMCE.TinyMCE');
-	public $components = array('Session', 'Paginator', 'RequestHandler');
+	public $components = array('Session', 'RequestHandler');
 	var $paginate = array('Centro' => array('limit' => 4, 'order' => 'Centro.cue ASC'));
 
  	public function beforeFilter() {
@@ -22,13 +22,20 @@ class CentrosController extends AppController {
 
  	function index() {
 		$this->Centro->recursive = 0;
-		$this->set('centros', $this->paginate());
-		$this->redirectToNamed();
+		
+		$this->paginate['Centro']['limit'] = 6;
+		$this->paginate['Centro']['order'] = array('Centro.nivel' => 'ASC');
+
+        $this->redirectToNamed();
 		$conditions = array();
 		
 		if(!empty($this->params['named']['cue']))
 		{
 			$conditions['Centro.cue ='] = $this->params['named']['cue'];
+		}
+		if(!empty($this->params['named']['nivel']))
+		{
+			$conditions['Centro.nivel ='] = $this->params['named']['nivel'];
 		}
 		
 		$centros = $this->paginate('Centro', $conditions);

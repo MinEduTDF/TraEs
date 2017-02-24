@@ -65,12 +65,12 @@ class InscripcionsController extends AppController {
 	}
 
 	public function add() {
-		  //abort if cancel button was pressed  
-          if(isset($this->params['data']['cancel'])){
-                $this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
-                $this->redirect( array( 'action' => 'index' ));
-		  }
-		  if (!empty($this->data)) {
+		//abort if cancel button was pressed  
+        if(isset($this->params['data']['cancel'])){
+            $this->Session->setFlash('Los cambios no fueron guardados. Agregación cancelada.', 'default', array('class' => 'alert alert-warning'));
+            $this->redirect( array( 'action' => 'index' ));
+		}
+		if (!empty($this->data)) {
 			$this->Inscripcion->create();
  		    
 			//Antes de guardar genera el nombre del agente
@@ -92,15 +92,20 @@ class InscripcionsController extends AppController {
                 $this->Session->setFlash('El alumno ya está inscripto en este ciclo.', 'default', array('class' => 'alert alert-danger'));
 			}else{
 				$this->request->data['Inscripcion']['legajo_nro'] = $this->__getCodigo($ciclo, $alumnoDoc);
-			//Antes de guardar genera el estado de la inscripción
-			    if($this->request->data['Inscripcion']['fotocopia_dni'] == true && $this->request->data['Inscripcion']['certificado_septimo'] == true && $this->request->data['Inscripcion']['certificado_laboral'] == true){
-			        $estado = "COMPLETA";	
-			    }else{
-			        $estado = "PENDIENTE";
-			    }
-			//Genera el estado y se deja en los datos que se intentaran guardar
-			    $this->request->data['Inscripcion']['estado'] = $estado;
-			
+				//Antes de guardar genera el estado de la inscripción
+				if($this->request->data['Inscripcion']['fotocopia_dni'] == true && $this->request->data['Inscripcion']['certificado_septimo'] == true && $this->request->data['Inscripcion']['certificado_laboral'] == true){
+				    $estado = "COMPLETA";	
+				}else{
+				    $estado = "PENDIENTE";
+				}
+				//Genera el estado y se deja en los datos que se intentaran guardar
+				$this->request->data['Inscripcion']['estado'] = $estado;
+				
+	            /*genera número de matriculados.
+				$cursoId = $this->Inscripcion->Curso->id;
+				$alumnosInscriptos = $this->Curso->CursosInscripcion->find('list', array('fields'=>array('curso_id'), 'conditions'=>array('CursosInscripcion.curso_id'=>$cursoId)));
+				$matriculados = (count($alumnosInscriptos));
+				*/
 				if ($this->Inscripcion->save($this->data)) {
 					$this->Session->setFlash('La inscripcion ha sido grabada.', 'default', array('class' => 'alert alert-success'));
 					$inserted_id = $this->Inscripcion->id;

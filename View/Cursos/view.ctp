@@ -8,10 +8,10 @@
 	         <div class="unit">
  		        <div class="row perfil">
                     <div class="col-md-4 col-sm-6 col-xs-8">	
+						<b><?php echo __('Institución: '); ?></b>
+						<?php echo ($this->Html->link($curso['Centro']['sigla'], array('controller' => 'centros', 'action' => 'view', $curso['Centro']['id']))); ?></p>
 						<b><?php echo __('Turno: '); ?></b>
 						<?php echo ($curso['Curso']['turno']); ?></p>
-						<b><?php echo __('Centro: '); ?></b>
-						<?php echo ($this->Html->link($curso['Centro']['sigla'], array('controller' => 'centros', 'action' => 'view', $curso['Centro']['id']))); ?></p>
 						<b><?php echo __('Aula: '); ?></b>
 						<?php echo ($curso['Curso']['aula_nro']); ?></p>
 			            <!--<b><?php echo __('Matriculados: '); ?></b>-->

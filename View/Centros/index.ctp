@@ -1,5 +1,5 @@
 <!-- start main -->
-<div class="TituloSec">Centros</div>
+<div class="TituloSec">Instituciones</div>
 <div id="ContenidoSec">
 	<div id="main">
 	<!-- start second nav -->
@@ -8,8 +8,8 @@
 	    		<div id="second-nav">
 				    <div class="unit text-center">
 					   <?php if($current_user['role'] == 'superadmin'): ?> 
-					    <span class="link"><?php echo $this->Html->link('Agregar', array('action' => 'add'), array('class' => 'btn btn-primary btn-lg')); ?>
-					    </span>
+					    <span class="link"><?php echo $this->Html->link('<i class="glyphicon glyphicon-plus"> </i> AGREGAR', array('action' => 'add'), array('class' => 'btn btn-primary','escape'=> false)); ?>
+              			</span>
 					   <?php endif; ?> 
 					</div>
 			    </div>

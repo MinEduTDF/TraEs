@@ -35,7 +35,7 @@
 		<div class="col-md-4">
  			<div class="unit">
  				<div class="subtitulo">Opciones</div>
-				<div class="opcion"><?php echo $this->Html->link(__('Listar Centros'), array('controller' => 'centros', 'action' => 'index')); ?></div>
+				<div class="opcion"><?php echo $this->Html->link(__('Listar Instituciones'), array('controller' => 'centros', 'action' => 'index')); ?></div>
 				<!--<div class="opcion"><?php echo $this->Html->link(__('Listar Ciclos'), array('controller' => 'ciclos', 'action' => 'index')); ?></div>
 		        <div class="opcion"><?php echo $this->Html->link(__('Listar Titulaciones'), array('controller' => 'titulacions', 'action' => 'index')); ?></div>	
                 <div class="opcion"><?php echo $this->Html->link(__('Listar Cursos'), array('controller' => 'cursos', 'action' => 'index')); ?></div>	
@@ -120,7 +120,7 @@
 	</div>
 </div>-->
 <!-- Cursos Relacionados --> 
-<div id="click_01" class="titulo_acordeon">Cursos Relacionados <span class="caret"></span></div>
+<div id="click_01" class="titulo_acordeon">Espacios Relacionados <span class="caret"></span></div>
 <div id="acordeon_01">
 	<div class="row">
 	<?php if (!empty($centro['Curso'])):?>

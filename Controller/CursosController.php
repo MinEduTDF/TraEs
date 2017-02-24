@@ -30,6 +30,10 @@ class CursosController extends AppController {
 		$this->redirectToNamed();
 		$conditions = array();
 		
+		if(!empty($this->params['named']['nivel']))
+		{
+			$conditions['Centro.nivel ='] = $this->params['named']['nivel'];
+		}
 		if(!empty($this->params['named']['centro_id']))
 		{
 			$conditions['Curso.centro_id ='] = $this->params['named']['centro_id'];
@@ -47,8 +51,11 @@ class CursosController extends AppController {
 			$conditions['Curso.turno ='] = $this->params['named']['turno'];
 		}
 		$cursos = $this->paginate('Curso',$conditions);
+		
 		$centros = $this->Curso->Centro->find('list', array('fields'=>array('sigla')));
-		$this->set(compact('cursos', 'centros'));
+		$centrosId = $this->Curso->find('list', array('fields'=>array('centro_id')));
+        $niveles = $this->Curso->Centro->find('list', array('fields'=>array('nivel'), 'conditions' => array('id' => $centrosId)));
+		$this->set(compact('cursos', 'centros', 'niveles', 'matricula'));
 	}
 
 	function view($id = null) {
@@ -83,9 +90,11 @@ class CursosController extends AppController {
 			
 			//Antes de guardar obtiene el ciclo actual.
 			$this->request->data['Curso']['ciclo_id'] = $this->getLastCicloId();
-			//Antes de guardar obtiene el centro del que pertenece el empleado.
-			$this->request->data['Curso']['centro_id'] = $this->Auth->user('centro_id');
-
+			// Si es un usuario con rol 'admin'.
+			if ($this->Auth->user('role') == 'admin') {
+				//Antes de guardar obtiene la institución a la que pertenece el agente.
+				$this->request->data['Curso']['centro_id'] = $this->Auth->user('centro_id');
+			}
 			if ($this->Curso->save($this->data)) {
 				$this->Session->setFlash('La sección ha sido grabada.', 'default', array('class' => 'alert alert-success'));
 				//$this->redirect(array('action' => 'index'));
@@ -96,10 +105,8 @@ class CursosController extends AppController {
 			}
 		}
 		$centros = $this->Curso->Centro->find('list');
-		$titulacions = $this->Curso->Titulacion->find('list');
-		$materias = $this->Curso->Materia->find('list');
 		$ciclos = $this->Curso->Ciclo->find('list');
-		$this->set(compact('centros', 'titulacions', 'materias', 'ciclos'));
+		$this->set(compact('centros', 'ciclos'));
 	}
 
 	function edit($id = null) {
@@ -115,7 +122,6 @@ class CursosController extends AppController {
 		  }
 		  if ($this->Curso->save($this->data)) {
 				$this->Session->setFlash('La sección ha sido grabada.', 'default', array('class' => 'alert alert-success'));
-				//$this->redirect(array('action' => 'index'));
 				$inserted_id = $this->Curso->id;
 				$this->redirect(array('action' => 'view', $inserted_id));
 			} else {
@@ -126,10 +132,8 @@ class CursosController extends AppController {
 			$this->data = $this->Curso->read(null, $id);
 		}
 		$centros = $this->Curso->Centro->find('list');
-		$titulacions = $this->Curso->Titulacion->find('list');
-		//$modalidads = $this->Curso->Modalidad->find('list');
 		$ciclos = $this->Curso->Ciclo->find('list');
-		$this->set(compact('centros', 'titulacions', 'modalidads', 'ciclos'));
+		$this->set(compact('centros', 'ciclos'));
 	}
 
 	function delete($id = null) {
