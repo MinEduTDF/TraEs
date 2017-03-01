@@ -48,12 +48,12 @@ class InscripcionsController extends AppController {
 		{
 			$conditions['Inscripcion.legajo_nro ='] = $this->params['named']['legajo_nro'];
 		}
-		if(!empty($this->params['named']['alumno_id']))
+		if(!empty($this->params['named']['estado']))
 		{
-			$conditions['Inscripcion.alumno_id ='] = $this->params['named']['alumno_id'];
+			$conditions['Inscripcion.estado ='] = $this->params['named']['estado'];
 		}
 		$inscripcions = $this->paginate('Inscripcion',$conditions);
-		$this->set(compact('inscripcions', 'alumnos', 'centros'));
+		$this->set(compact('inscripcions','centros', 'alumnos'));
 	}
 
 	public function view($id = null) {
@@ -130,12 +130,13 @@ class InscripcionsController extends AppController {
 		    }
 			
 			//Antes de guardar genera el estado de la inscripción
-			if($this->request->data['Inscripcion']['fotocopia_dni'] == true && $this->request->data['Inscripcion']['certificado_septimo'] == true && $this->request->data['Inscripcion']['certificado_laboral'] == true){
-			   $estado = "COMPLETA";	
-			}else{
-			   $estado = "PENDIENTE";
-			}
-			
+			if(! $this->request->data['Inscripcion']['fecha_baja']) {
+				if($this->request->data['Inscripcion']['fotocopia_dni'] == true && $this->request->data['Inscripcion']['certificado_septimo'] == true && $this->request->data['Inscripcion']['certificado_laboral'] == true){
+				   $estado = "COMPLETA";	
+				}else{
+				   $estado = "PENDIENTE";
+				}
+			} else {$estado = "BAJA";}
 			//Se genera el estado y se deja en los datos que se intentaran guardar
 			$this->request->data['Inscripcion']['estado'] = $estado;
 			if ($this->Inscripcion->save($this->data)) {

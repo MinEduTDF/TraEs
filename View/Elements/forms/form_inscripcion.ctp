@@ -45,10 +45,9 @@
             */
         ?>                  
     </div>        
-      <!--<?php echo '</div><div class="col-md-4 col-sm-6 col-xs-12">'; ?>
+      <?php echo '</div><div class="col-md-4 col-sm-6 col-xs-12">'; ?>
     <div class="unit"><strong><h3>Datos de la Baja/Egreso</h3></strong><hr />   
         <?php
-            /*
             echo $this->Form->input('fecha_baja', array('label' => 'Fecha de Baja', 'type' => 'text', 'between' => '<br>', 'empty' => ' ','class' => 'datepicker form-control', 'Placeholder' => 'Ingrese una fecha...'));
             $tipos_baja = array('Salido con pase' => 'Salido con pase', 'Salido sin pase' => 'Salido sin pase', 'Pérdida de regularidad' => 'Pérdida de regularidad',       'Fallecimiento' => 'Fallecimiento');
             echo $this->Form->input('tipo_baja', array('label' => 'Baja tipo', 'empty' => 'Ingrese una opción...', 'options' => $tipos_baja, 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Seleccione una opción'));
@@ -60,8 +59,7 @@
             echo $this->Form->input('acta_nro', array('label' => 'Acta Nº', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un nº de acta', 'Placeholder' => 'Ingrese un nº de acta...'));
             echo $this->Form->input('libro_nro', array('label' => 'Libro Nº', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un nº de libro', 'Placeholder' => 'Ingrese un nº de libro...'));
             echo $this->Form->input('folio_nro', array('label' => 'Folio Nº', 'between' => '<br>', 'class' => 'form-control', 'data-toggle' => 'tooltip', 'data-placement' => 'bottom', 'title' => 'Ingrese un nº de folio', 'Placeholder' => 'Ingrese un nº de folio...'));
-            */
-          ?>-->
+        ?>
     </div> 
   </div>
   <div class="row">

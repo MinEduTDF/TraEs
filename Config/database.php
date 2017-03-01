@@ -85,7 +85,7 @@ class DATABASE_CONFIG {
 		'host' => 'localhost',
 		'login' => 'root',
 		'password' => '',
-		'database' => 'traes-ip',
+		'database' => 'traes_ip',
 		'prefix' => '',
 		'encoding' => 'utf8',
 	);

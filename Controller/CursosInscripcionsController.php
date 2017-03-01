@@ -17,16 +17,20 @@ class CursosInscripcionsController extends AppController {
 		$this->CursosInscripcion->recursive = 1;
 		$this->paginate['CursosInscripcion']['limit'] = 8;
 		$this->paginate['CursosInscripcion']['order'] = array('CursosInscripcion.curso_id' => 'ASC');
+		
 		$cicloIdActual = $this->getLastCicloId();
-		$userCentroId = $this->getUserCentroId();
+		$estado1 = "COMPLETA";
+		$estado2 = "PENDIENTE";
 		if($this->Auth->user('role') === 'admin') {
-		$this->paginate['CursosInscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.centro_id' => $userCentroId);
+			$userCentroId = $this->getUserCentroId();
+			$this->paginate['CursosInscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.estado' => $estado1, 'Inscripcion.estado' => $estado2, 'Inscripcion.centro_id' => $userCentroId);
+		} else {
+			$this->paginate['CursosInscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.estado' => $estado1, 'Inscripcion.estado' => $estado2);		
 		}
-
+        
 		$this->loadModel('Ciclo');
 		$this->loadModel('Centro');
 		$this->loadModel('Alumno');
-				
 		$ciclosId = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('ciclo_id')));
         $ciclos = $this->Ciclo->find('list', array('fields'=>array('nombre'), 'conditions' => array('id' => $ciclosId)));
         $centrosId = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('centro_id')));

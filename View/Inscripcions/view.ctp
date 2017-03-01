@@ -23,7 +23,7 @@
                         <?php } ?></p>
                         </p>
                     </div>
-                    <div class="col-md-6 col-sm-4 col-xs-12">
+                    <div class="col-md-4 col-sm-4 col-xs-12">
                     <!--<h3>Datos previos</h3>-->
                     <!--<div id="click_03" class="titulo_acordeon_datos">Datos previos <span class="caret"</span></div>
                         <div id="acordeon_03">
@@ -58,7 +58,7 @@
                                   </ul>
                             </div>
                         </div>
-                        <!--<div id="click_05" class="titulo_acordeon_datos">Baja <span class="caret"</span></div>
+                        <div id="click_05" class="titulo_acordeon_datos">Baja <span class="caret"</span></div>
                         <div id="acordeon_05">
                             <div class="unit">
                                 <b><?php echo __('Tipo:'); ?></b>
@@ -68,7 +68,7 @@
                                 <b><?php echo __('Motivo:'); ?></b>
                                 <?php echo $inscripcion['Inscripcion']['motivo_baja']; ?></p>
                              </div>
-                             <!--<h3>Datos del egreso</h3>
+                             <!--<h3>Datos del egreso</h3>-->
                         </div>
                     </div>
                     <div class="col-md-4 col-sm-4 col-xs-12">
@@ -85,7 +85,7 @@
                                     <?php echo $inscripcion['Inscripcion']['folio_nro']; ?></p>
                                 </div>
                             </div>
-                    <!--<h3>Datos de la titulación</h3>
+                    <!--<h3>Datos de la titulación</h3>-->
                     <div id="click_07" class="titulo_acordeon_datos">Titulación <span class="caret"</span></div>
                         <div id="acordeon_07">
                            <div class="unit">
