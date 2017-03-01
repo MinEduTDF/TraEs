@@ -6,7 +6,7 @@ class CursosInscripcionsController extends AppController {
 	var $name = 'CursosInscripcions';
     var $helpers = array('Session', 'Form', 'Time', 'Js');
     var $components = array('Auth','Session', 'RequestHandler');
-   	var $paginate = array('CursosInscripcion' => array('limit' => 2, 'order' => 'CursosInscripcion.curso_id ASC'));
+   	var $paginate = array('CursosInscripcion' => array('limit' => 8, 'order' => 'CursosInscripcion.curso_id ASC'));
 
 /**
  * index method
@@ -19,13 +19,12 @@ class CursosInscripcionsController extends AppController {
 		$this->paginate['CursosInscripcion']['order'] = array('CursosInscripcion.curso_id' => 'ASC');
 		
 		$cicloIdActual = $this->getLastCicloId();
-		$estado1 = "COMPLETA";
-		$estado2 = "PENDIENTE";
+		$estado2 = array("COMPLETA", "PENDIENTE");
 		if($this->Auth->user('role') === 'admin') {
 			$userCentroId = $this->getUserCentroId();
-			$this->paginate['CursosInscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.estado' => $estado1, 'Inscripcion.estado' => $estado2, 'Inscripcion.centro_id' => $userCentroId);
+			$this->paginate['CursosInscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.estado' => $estado2, 'Inscripcion.centro_id' => $userCentroId);
 		} else {
-			$this->paginate['CursosInscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.estado' => $estado1, 'Inscripcion.estado' => $estado2);		
+			$this->paginate['CursosInscripcion']['conditions'] = array('Inscripcion.ciclo_id' => $cicloIdActual, 'Inscripcion.estado' => $estado2);		
 		}
         
 		$this->loadModel('Ciclo');
