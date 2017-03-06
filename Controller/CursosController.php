@@ -106,7 +106,9 @@ class CursosController extends AppController {
 		}
 		$centros = $this->Curso->Centro->find('list');
 		$ciclos = $this->Curso->Ciclo->find('list');
-		$this->set(compact('centros', 'ciclos'));
+		$userCentroId = $this->getUserCentroId();
+		$centroNivel = $this->Curso->Centro->find('list', array('fields'=>array('id','nivel')));
+		$this->set(compact('centros', 'ciclos', 'centroNivel'));
 	}
 
 	function edit($id = null) {
@@ -133,7 +135,9 @@ class CursosController extends AppController {
 		}
 		$centros = $this->Curso->Centro->find('list');
 		$ciclos = $this->Curso->Ciclo->find('list');
-		$this->set(compact('centros', 'ciclos'));
+		$userCentroId = $this->getUserCentroId();
+		$centroNivel = $this->Curso->Centro->find('list', array('fields'=>array('id','nivel')));
+		$this->set(compact('centros', 'ciclos', 'centroNivel'));
 	}
 
 	function delete($id = null) {

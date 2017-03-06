@@ -170,14 +170,15 @@ class InscripcionsController extends AppController {
 	private function __lists(){
 	    $this->loadModel('User');
         $this->loadModel('Empleado');
-		$alumnos = $this->Inscripcion->Alumno->find('list', array('fields'=>array('id', 'nombre_completo_alumno'), 'order'=>'nombre_completo_alumno ASC'));
 		$ciclos = $this->Inscripcion->Ciclo->find('list');
 		$cicloIdActual = $this->getLastCicloId();
+		$userCentroId = $this->getUserCentroId();
 		$centros = $this->Inscripcion->Centro->find('list');
-		$cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('id','nombre_completo_curso')));
-		$materias = $this->Inscripcion->Materia->find('list');
+		$cursos = $this->Inscripcion->Curso->find('list', array('fields'=>array('id','nombre_completo_curso'), 'conditions'=>array('centro_id' => $userCentroId)));
+		$alumnos = $this->Inscripcion->Alumno->find('list', array('fields'=>array('id', 'nombre_completo_alumno'), 'order'=>'nombre_completo_alumno ASC', 'conditions'=>array('centro_id' => $userCentroId)));
 		$empleados = $this->Inscripcion->Empleado->find('list', array('fields'=>array('id', 'nombre_completo_empleado'), 'conditions'=>array('id'== 'empleadoId')));
-	    $this->set(compact('alumnos', 'ciclos', 'centros', 'cursos', 'materias', 'empleados', 'cicloIdActual'));
+	    $centroNivel = $this->Inscripcion->Centro->find('list', array('fields'=>array('id','nivel')));
+	    $this->set(compact('alumnos', 'ciclos', 'centros', 'cursos', 'empleados', 'cicloIdActual', 'userCentroId', 'centroNivel'));
 	}
 	
 	private function __getCodigo($ciclo, $alumnoDoc){
