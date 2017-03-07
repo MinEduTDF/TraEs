@@ -2,7 +2,7 @@
 <?php if(($current_user['role'] == 'superadmin') || ($current_user['role'] == 'usuario')): ?>
 <div class="form-group">
     <?php 
-       echo $this->Form->input('centro_id', array('label' => false, 'class' => 'form-control', 'Placeholder' => 'Ingrese una institución...'));	
+       echo $this->Form->input('centro_id', array('label' => false, 'empty' => 'Ingrese una institución...', 'class' => 'form-control'));	
     ?>
 </div><br>
 <?php endif; ?>

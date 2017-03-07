@@ -48,8 +48,7 @@
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Ver <span class="caret"></span></a>
           <ul class="dropdown-menu">
-           <?php if($current_user['role'] == 'usuario'): ?> 
-            <li><?php echo $this->Html->link(__('Instituciones'),'/centros'); ?></li>
+           <?php if(($current_user['role'] == 'visoradmin') || ($current_user['role'] == 'usuario')): ?> <li><?php echo $this->Html->link(__('Instituciones'),'/centros'); ?></li>
             <li><?php echo $this->Html->link(__('Secciones'),'/cursos'); ?></li>
             <li><?php echo $this->Html->link(__('Alumnos'),'/alumnos'); ?></li>
             <li><?php echo $this->Html->link(__('Inscripciones'), '/inscripcions'); ?></li>

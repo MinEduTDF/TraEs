@@ -22,7 +22,7 @@ class UsersController extends AppController {
         //logout y la correspondiente a usuario (página solo para ellos)
 	    if($this->Auth->user('role') === 'superadmin') {
 	        $this->Auth->allow();
-	    } elseif ($this->Auth->user('role') === 'admin' || ($this->Auth->user('role') === 'usuario')) { 
+	    } elseif (($this->Auth->user('role') === 'admin') || ($this->Auth->user('role') === 'visoradmin') || ($this->Auth->user('role') === 'usuario')) { 
 	        $this->Auth->allow('logout', 'usuario');
 	    } 
     }     

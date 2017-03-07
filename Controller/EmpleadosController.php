@@ -5,7 +5,7 @@ class EmpleadosController extends AppController {
 
 	var $name = 'Empleados';
     public $helpers = array('Form', 'Time', 'Js', 'TinyMCE.TinyMCE');
-	public $components = array('Session', 'Paginator', 'RequestHandler');
+	public $components = array('Session', 'RequestHandler');
 	var $paginate = array('Empleado' => array('limit' => 3, 'order' => 'Empleado.id DESC'));
 	
     public function beforeFilter() {
@@ -18,6 +18,8 @@ class EmpleadosController extends AppController {
 
     function index() {
 		//$this->Empleado->recursive = 0;
+		$this->paginate['Empleado']['limit'] = 4;
+		$this->paginate['Empleado']['order'] = array('Alumno.id' => 'ASC');
 		$this->set('empleados', $this->paginate());
 		$this->redirectToNamed();
 		$conditions = array();

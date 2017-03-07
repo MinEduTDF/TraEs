@@ -35,9 +35,9 @@ class User extends AppModel {
 			 'message' => 'Indicar una fecha y hora.'
          ),
 		'between' => array( 
-			'rule' => array('between', 5, 15), 
+			'rule' => array('between', 4, 15), 
 			'required' => true, 
-			'message' => 'Usernames must be between 5 to 15 characters'
+			'message' => 'Usernames must be between 4 to 15 characters'
 		),
 		'isUnique' => array(
 			 'rule' => 'isUnique',
@@ -86,7 +86,7 @@ class User extends AppModel {
 	),
 	'role' => array(
 		'valid' => array(
-			'rule' => array('inList', array('superadmin' ,'admin', 'usuario')),
+			'rule' => array('inList', array('superadmin', 'visoradmin', 'admin', 'usuario')),
 			'message' => 'Ingrese un rol válido',
 			'allowEmpty' => false
 		)
