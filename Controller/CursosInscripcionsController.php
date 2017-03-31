@@ -34,7 +34,12 @@ class CursosInscripcionsController extends AppController {
         $ciclos = $this->Ciclo->find('list', array('fields'=>array('nombre'), 'conditions' => array('id' => $ciclosId)));
         $centrosId = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('centro_id')));
         $centros = $this->Centro->find('list', array('fields'=>array('sigla'), 'conditions' => array('id' => $centrosId)));
-        $cursos = $this->CursosInscripcion->Curso->find('list', array('fields'=>array('id', 'nombre_completo_curso')));
+        // Carga el combobox de los cursos según la institución correspondiente.
+        if($this->Auth->user('role') === 'admin') {
+          $cursos = $this->CursosInscripcion->Curso->find('list', array('fields'=>array('id', 'nombre_completo_curso'), 'conditions' => array('centro_id' => $userCentroId)));    
+        } else {
+          $cursos = $this->CursosInscripcion->Curso->find('list', array('fields'=>array('id', 'nombre_completo_curso')));  
+        }
 		$inscripcions = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('id', 'legajo_nro')));
         $alumnosId = $this->CursosInscripcion->Inscripcion->find('list', array('fields'=>array('alumno_id')));
         $alumnos = $this->Alumno->find('list', array('fields'=>array('nombre_completo_alumno'), 'conditions' => array('id' => $alumnosId)));
