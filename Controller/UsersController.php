@@ -6,7 +6,6 @@ class UsersController extends AppController {
  
     public $helpers = array('Text', 'Js', 'Time');
     public $components = array('Paginator', 'RequestHandler', 'Session');
-  
     public $paginate = array(
         'limit' => 25,
         'conditions' => array('status' => '1'),
@@ -60,7 +59,7 @@ class UsersController extends AppController {
     }
 
     public function index() {
-        //$this->User->recursive = 0;
+        $this->User->recursive = 0;
 		$this->paginate = array(
             'limit' => 6,
             'order' => array('User.username' => 'asc' )

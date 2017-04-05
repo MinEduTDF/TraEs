@@ -19,8 +19,7 @@ class MateriasController extends AppController {
     }
 
 	public function index() {
-		$this->Materia->recursive = 1;
-		
+		$this->Materia->recursive = -1;
 		$this->paginate['Materia']['limit'] = 6;
 		$this->paginate['Materia']['order'] = $this->Materia->Curso->find('list', array('fields'=>array('id', 'nombre_completo_curso'), 'order'=>'Curso.anio ASC'));
 		$this->redirectToNamed();

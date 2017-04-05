@@ -17,7 +17,7 @@ class EmpleadosController extends AppController {
     }
 
     function index() {
-		//$this->Empleado->recursive = 0;
+		$this->Empleado->recursive = -1;
 		$this->paginate['Empleado']['limit'] = 4;
 		$this->paginate['Empleado']['order'] = array('Alumno.id' => 'ASC');
 		$this->set('empleados', $this->paginate());

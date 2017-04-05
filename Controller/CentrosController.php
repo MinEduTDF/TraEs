@@ -21,7 +21,7 @@ class CentrosController extends AppController {
     }
 
  	function index() {
-		$this->Centro->recursive = 0;
+		$this->Centro->recursive = -1;
 		
 		$this->paginate['Centro']['limit'] = 6;
 		$this->paginate['Centro']['order'] = array('Centro.nivel' => 'ASC');

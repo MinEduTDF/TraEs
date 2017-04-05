@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class CursosController extends AppController {
 
 	var $name = 'Cursos';
-    var $helpers = array('Form', 'Time', 'Js');
+    public $helpers = array('Form', 'Time', 'Js');
 	var $components = array('Session', 'RequestHandler');
 	var $paginate = array('Curso' => array('limit' => 4, 'order' => 'Curso.anio ASC'));
 
@@ -20,7 +20,7 @@ class CursosController extends AppController {
     } 
 
 	function index() {
-		$this->Curso->recursive = 1;
+		$this->Curso->recursive = 0;
 		$this->paginate['Curso']['limit'] = 4;
 		$this->paginate['Curso']['order'] = array('Curso.anio' => 'ASC');
 		$userCentroId = $this->getUserCentroId();

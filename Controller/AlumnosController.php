@@ -20,7 +20,7 @@ class AlumnosController extends AppController {
     }
     
     public function index() {
-		$this->Alumno->recursive = 0;
+		$this->Alumno->recursive = -1;
 		$this->paginate['Alumno']['limit'] = 4;
 		$this->paginate['Alumno']['order'] = array('Alumno.id' => 'ASC');
 		$userCentroId = $this->getUserCentroId();

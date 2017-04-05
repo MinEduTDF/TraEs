@@ -11,7 +11,7 @@ class InscripcionsController extends AppController {
 		
 	function beforeFilter(){
 	    parent::beforeFilter();
-		//Si el usuario tiene un rol de superadmin le damos acceso a todo.
+		//Si el usuario tiene un rol de superadmin le damos acceso a ,.
         //Si no es así (se trata de un usuario "admin o usuario") tendrá acceso sólo a las acciones que les correspondan.
         if(($this->Auth->user('role') === 'superadmin') || ($this->Auth->user('role') === 'visoradmin') || ($this->Auth->user('role') === 'admin')) {
 	        $this->Auth->allow();
@@ -25,7 +25,7 @@ class InscripcionsController extends AppController {
     }
 	
 	public function index() {
-		$this->Inscripcion->recursive = 1;
+		$this->Inscripcion->recursive = -1;
 		$this->paginate['Inscripcion']['limit'] = 4;
 		$this->paginate['Inscripcion']['order'] = array('Inscripcion.fecha_alta' => 'DESC');
 		$cicloIdActual = $this->getLastCicloId();

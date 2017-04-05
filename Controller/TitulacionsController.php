@@ -2,12 +2,12 @@
 class TitulacionsController extends AppController {
 
 	var $name = 'Titulacions';
-    var $helpers = array('Session');
+    public $helpers = array('Session');
 	var $components = array('Auth','Session');
 	var $paginate = array('Titulacion' => array('limit' => 4, 'order' => 'Titulacion.nombre DESC'));
 
 	function index() {
-		$this->Titulacion->recursive = 0;
+		$this->Titulacion->recursive = -1;
 		$this->set('titulacions', $this->paginate());
 		$titulacions = $this->Titulacion->find('list', array('fields'=>array('id', 'nombre')));
 		$this->redirectToNamed();
