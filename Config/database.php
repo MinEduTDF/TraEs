@@ -65,27 +65,13 @@
  * A key/value array of driver specific connection options.
  */
 class DATABASE_CONFIG {
-
-	/*
 	public $default = array(
-		'datasource' => 'Database/Mysql',
-		'persistent' => false,
-		'host' => 'mysql.hostinger.com.ar',
-		'login' => 'u563169802_root',
-		'password' => 'traes-ip2017',
-		'database' => 'u563169802_tip',
-		'prefix' => '',
-		'encoding' => 'utf8',
-	);
-	*/
-
-    public $default = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
 		'host' => 'localhost',
 		'login' => 'root',
 		'password' => '',
-		'database' => 'traes_ip',
+		'database' => 'traes_ipes',
 		'prefix' => '',
 		'encoding' => 'utf8',
 	);
@@ -96,7 +82,7 @@ class DATABASE_CONFIG {
 		'host' => 'localhost',
 		'login' => 'root',
 		'password' => '',
-		'database' => 'test_traes_inicial_primaria',
+		'database' => 'test_traes_ipes',
 		'prefix' => '',
 		//'encoding' => 'utf8',
 	);
